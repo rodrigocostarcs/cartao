@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :caju, Caju.Repo,
   username: "root",
-  password: "",
+  password: "Caju@1234",
   hostname: "localhost",
   database: "caju_dev",
   stacktrace: true,

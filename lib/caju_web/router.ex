@@ -14,9 +14,10 @@ defmodule CajuWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", CajuWeb do
+  scope "/api", CajuWeb do
     pipe_through :browser
-
+    get "/contas/:id", ContasController, :get_conta
+    get "/ping", PingController, :index
     get "/", PageController, :home
   end
 
