@@ -91,3 +91,10 @@ CREATE TABLE transacoes_cash (
     status VARCHAR(10) CHECK (status IN ('pendente', 'confirmado', 'cancelado')),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE estabelecimentos (
+    uuid CHAR(36) PRIMARY KEY,
+    nome_estabelecimento VARCHAR(255) NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
