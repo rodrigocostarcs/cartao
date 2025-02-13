@@ -1,18 +1,24 @@
 # Caju
+Configuração ambiente MySQL usando Ubuntu:
 
-To start your Phoenix server:
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl start mysql
+sudo systemctl enable mysql
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+mysql -u root -p
+rodar todos comandos do arquivo comandos.sql
+rodar todos os comandos do arquivo inserts.sql
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Instalar Elixir e Erlang usando Ubuntu:
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+sudo apt update
+sudo apt install erlang elixir
+elixir --version
+mix archive.install hex phx_new 1.7.0
 
-## Learn more
+Projeto clonado acessar 
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+cd caju
+mix deps.get
+mix phx.server -- rodar a api
