@@ -28,6 +28,11 @@ defmodule CajuWeb.Router do
     post "/login", AuthController, :login
   end
 
+  scope "/teste", CajuWeb do
+    pipe_through :api
+    get "/ping", PingController, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", CajuWeb do
   #   pipe_through :api
@@ -42,9 +47,9 @@ defmodule CajuWeb.Router do
     # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
-    scope "/dev" do
+    scope "/dev", CajuWeb do
       pipe_through :browser
-      get "/ping", PingController, :index
+
       get "/", PageController, :home
       live_dashboard "/dashboard", metrics: CajuWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
