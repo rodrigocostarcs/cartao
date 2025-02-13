@@ -7,6 +7,11 @@
 # General application configuration
 import Config
 
+config :caju, Caju.Guardian,
+  issuer: "caju",
+  secret_key: "MvbohvG2p82GA29dgXJQG0btDX8ccsHKwy3RZKfd/vvxMdgyK0sVxRvTY2RHLKZV",
+  ttl: {1, :hour}
+
 config :caju,
   ecto_repos: [Caju.Repo]
 

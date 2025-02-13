@@ -28,5 +28,5 @@ INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (2, 4); -- Restaurante B
 -- Associando MCCs de CASH
 INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (3, 5); -- Loja de Conveniência
 
-INSERT INTO estabelecimentos (nome_estabelecimento, senha_hash, uuid) 
+INSERT INTO estabelecimentos (nome_estabelecimento, senha_hash, uuid)  -- senha = "senha_secreta"
 VALUES ('Estabelecimento Exemplo', '$pbkdf2-sha512$160000$/CrIInlvYGHTbkQQ2H8jaQ$0GhMgH2tWaypbZfGGy5AKUviZTBeo9Yd4VHZQyKtWhmuFZG/4CMxowQMMJGFh5lLIThBzr7qOIX2aPS.bQ120w', 'fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea');

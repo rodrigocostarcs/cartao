@@ -14,11 +14,18 @@ defmodule CajuWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug Caju.Guardian.AuthPipeline
+  end
+
   scope "/api", CajuWeb do
-    pipe_through :browser
+    pipe_through [:api, :auth]
     get "/contas/:id", ContasController, :get_conta
-    get "/ping", PingController, :index
-    get "/", PageController, :home
+  end
+
+  scope "/auth", CajuWeb do
+    pipe_through :api
+    post "/login", AuthController, :login
   end
 
   # Other scopes may use custom stacks.
@@ -37,7 +44,8 @@ defmodule CajuWeb.Router do
 
     scope "/dev" do
       pipe_through :browser
-
+      get "/ping", PingController, :index
+      get "/", PageController, :home
       live_dashboard "/dashboard", metrics: CajuWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
