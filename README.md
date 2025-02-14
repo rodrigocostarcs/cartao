@@ -1,8 +1,6 @@
 # Caju - Modelo Relacional Banco de Ddados
 ![Diagrama da Aplicação](diagrama.jpg)
 
-## Explicação do Diagrama Entidade Relacionamento
-
 ## Descrição das Tabelas do Banco de Dados
 
 ### 1. Tabela `contas`
