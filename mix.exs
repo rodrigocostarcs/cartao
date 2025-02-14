@@ -52,7 +52,8 @@ defmodule Caju.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:comeonin, "~> 5.3"},
-      {:pbkdf2_elixir, "~> 1.3"}
+      {:pbkdf2_elixir, "~> 1.3"},
+      {:guardian, "~> 2.3"}
     ]
   end
 

@@ -14,11 +14,23 @@ defmodule CajuWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug Caju.Guardian.AuthPipeline
+  end
+
   scope "/api", CajuWeb do
-    pipe_through :browser
+    pipe_through [:api, :auth]
     get "/contas/:id", ContasController, :get_conta
+  end
+
+  scope "/auth", CajuWeb do
+    pipe_through :api
+    post "/login", AuthController, :login
+  end
+
+  scope "/teste", CajuWeb do
+    pipe_through :api
     get "/ping", PingController, :index
-    get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
@@ -35,9 +47,10 @@ defmodule CajuWeb.Router do
     # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
-    scope "/dev" do
+    scope "/dev", CajuWeb do
       pipe_through :browser
 
+      get "/", PageController, :home
       live_dashboard "/dashboard", metrics: CajuWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
