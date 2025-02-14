@@ -10,7 +10,9 @@ defmodule CajuWeb.TransacaoController do
       }) do
     case TransacaoService.buscar_carteira_por_conta(account) do
       {:ok, carteiras} ->
-        {:ok, code} = TransacaoService.efetivar_transacao(carteiras, amount, mcc, merchant)
+        code =
+          TransacaoService.efetivar_transacao(carteiras, amount, mcc, merchant)
+          |> pegar_codigo_transacao()
 
         conn
         |> put_status(:ok)
@@ -20,6 +22,13 @@ defmodule CajuWeb.TransacaoController do
         conn
         |> put_status(:ok)
         |> json(%{code: "07"})
+    end
+  end
+
+  defp pegar_codigo_transacao(retorno_transacao) do
+    case retorno_transacao do
+      {:ok, {:ok, code}} -> code
+      {:error, :saldo_insuficiente} -> "51"
     end
   end
 end
