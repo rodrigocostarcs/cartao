@@ -1,6 +1,159 @@
 # Caju - Modelo Relacional Banco de Ddados
 ![Diagrama da Aplicação](diagrama.jpg)
 
+## Explicação do Diagrama Entidade Relacionamento
+
+## Descrição das Tabelas do Banco de Dados
+
+### 1. Tabela `contas`
+**Chave Primária (PK):** `id`
+
+**Campos:**
+- `numero_conta`
+- `nome_titular`
+- `criado_em`
+
+Essa tabela armazena as contas dos usuários.
+
+---
+
+### 2. Tabela `transacoes_food`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
+
+**Campos:**
+- `tipo`
+- `valor`
+- `status`
+- `criado_em`
+
+Registra as transações relacionadas a alimentação.
+
+---
+
+### 3. Tabela `transacoes_meal`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
+
+**Campos:**
+- `tipo`
+- `valor`
+- `status`
+- `criado_em`
+
+Registra transações de refeição.
+
+---
+
+### 4. Tabela `transacoes_cash`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
+
+**Campos:**
+- `tipo`
+- `valor`
+- `status`
+- `criado_em`
+
+Registra transações em dinheiro.
+
+---
+
+### 5. Tabela `carteiras`
+**Chave Primária (PK):** `id_carteira`
+
+**Campos:**
+- `tipo_beneficio`
+- `descricao`
+- `criado_em`
+
+Representa os diferentes tipos de carteiras, como alimentação, refeição, etc.
+
+---
+
+### 6. Tabela `contas_carteiras`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `conta_id` → referencia `contas(id)`
+
+**Chave Estrangeira (FK):** `carteira_id` → referencia `carteiras(id_carteira)`
+
+**Campos:**
+- `saldo`
+- `saldo_reservado`
+- `atualizado_em`
+- `ativo`
+- `criado_em`
+
+Liga as contas dos usuários às suas carteiras, armazenando saldos e status.
+
+---
+
+### 7. Tabela `Extratos`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
+
+**Chave Estrangeira (FK):** `id_carteira` → referencia `carteiras(id_carteira)`
+
+**Campos:**
+- `debito`
+- `credito`
+- `data_transacao`
+- `descricao`
+
+Armazena o histórico de movimentações.
+
+---
+
+### 8. Tabela `mccs`
+**Chave Primária (PK):** `id`
+
+**Campos:**
+- `codigo_mcc`
+- `nome_estabelecimento`
+
+Representa os códigos e nomes dos estabelecimentos comerciais.
+
+---
+
+### 9. Tabela `carteiras_mccs`
+**Chave Primária (PK):** `id`
+
+**Chave Estrangeira (FK):** `carteira_id` → referencia `carteiras(id_carteira)`
+
+**Chave Estrangeira (FK):** `mcc_id` → referencia `mccs(id)`
+
+**Campos:**
+- `criado_em`
+
+Relaciona as carteiras aos estabelecimentos (MCCs).
+
+---
+
+### 10. Tabela `estabelecimentos`
+**Chave Primária (PK):** `uuid`
+
+**Campos:**
+- `nome_estabelecimento`
+- `senha_hash`
+- `criado_em`
+
+Armazena dados dos estabelecimentos cadastrados.
+
+---
+
+## Resumo das Relações
+- `contas` se relaciona com `transacoes_food`, `transacoes_meal`, `transacoes_cash` e `Extratos`.
+- `contas_carteiras` liga `contas` e `carteiras`.
+- `Extratos` também se relaciona com `carteiras`.
+- `carteiras_mccs` relaciona `carteiras` com `mccs`.
+- `estabelecimentos` armazena informações dos estabelecimentos.
+
+
 # Caju - Guia de Configuração e Execução
 
 ## Configuração do Ambiente MySQL no Ubuntu
