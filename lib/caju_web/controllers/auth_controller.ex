@@ -6,9 +6,16 @@ defmodule CajuWeb.AuthController do
   def login(conn, %{"uuid" => uuid, "senha" => senha}) do
     case EstabelecimentosService.authenticate(uuid, senha) do
       {:ok, estabelecimento} ->
-        case Guardian.encode_and_sign(estabelecimento) do
+        claims = %{
+          "nome" => estabelecimento.nome_estabelecimento,
+          "uuid" => estabelecimento.uuid
+        }
+
+        case Guardian.encode_and_sign(estabelecimento, claims, ttl: {1, :minutes}) do
           {:ok, token, _claims} ->
-            json(conn, %{token: token})
+            json(conn, %{
+              token: token
+            })
 
           {:error, reason} ->
             conn
