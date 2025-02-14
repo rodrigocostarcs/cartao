@@ -6,6 +6,9 @@ defmodule Caju.Mccs do
   schema "mccs" do
     field :codigo_mcc, :string
     field :nome_estabelecimento, :string
+
+    has_many :carteiras_mccs, Caju.CarteirasMccs, foreign_key: :mcc_id
+    has_many :carteiras, through: [:carteiras_mccs, :carteira]
   end
 
   @doc false

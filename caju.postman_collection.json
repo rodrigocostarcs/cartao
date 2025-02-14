@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "7f066d5d-210b-40d8-845b-a63e33e851ea",
+		"name": "caju",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6687784"
+	},
+	"item": [
+		{
+			"name": "Teste API",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/teste/ping",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"teste",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/auth/login?uuid=fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea&senha=senha_secreta",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "uuid",
+							"value": "fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea"
+						},
+						{
+							"key": "senha",
+							"value": "senha_secreta"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Meal 5811",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5811\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Meal 5812",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5812\",\r\n\t\"merchant\": \"Restaurante B\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Food 5411",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"123456\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5411\",\r\n\t\"merchant\": \"Supermercado A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Food 5412",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"123456\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5412\",\r\n\t\"merchant\": \"Supermercado B\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Cash - Sem saldo na carteira Meal",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 2800.01, //a carteira meal nesse momento tinha 2800 e a cash 3000, após ficou 199.99\r\n\t\"mcc\": \"5811\",\r\n\t\"merchant\": \"Supermercado B\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Carteira Cash Mcc não mapeado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100, //descontou da carteira cash porque não achou o mcc e nem o merchant\r\n\t\"mcc\": \"58191\",\r\n\t\"merchant\": \"Loja jp\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Mapear por merchant",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzQxODMyNDA4LCJpYXQiOjE3Mzk0MTMyMDgsImlzcyI6ImNhanUiLCJqdGkiOiI0MzdjYTA4My1iYjUyLTRkMWQtYjY2Mi02MzBkNDM5MWYzYmIiLCJuYmYiOjE3Mzk0MTMyMDcsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.lrvhI4cwJo8guiZYi5lCPhkMBqWpnb5lZJSZ8IaRsZdouCsN7ieDIPRf0nMDZK-xCjRJxf3FlBC0mTiUCWY_aw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 0.55,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Sem saldo suficiente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzM5NTQ5MDc3LCJpYXQiOjE3Mzk1NDg5NTcsImlzcyI6ImNhanUiLCJqdGkiOiIwMWM5MjkwYy1mNWNjLTQ2NjktODM2My1jZDBiNzI3YzI2YzkiLCJuYmYiOjE3Mzk1NDg5NTYsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyJ9.1t4fPJbOKfAJVoHnKb3TA5WqSDWrACzIvvwAKPx46Ol49EXq2y0zU7TMijIrpke35FELn4A8vpmeVwgexXFlgw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Efetivar Transação - Qualquer outro erro",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjYWp1IiwiZXhwIjoxNzM5NTQ5NTI5LCJpYXQiOjE3Mzk1NDk0NjksImlzcyI6ImNhanUiLCJqdGkiOiIyZTZiMzRjOS1kMTEyLTQ2ZWYtYmVhOC03NTgwYTQyZjBhNjMiLCJuYmYiOjE3Mzk1NDk0NjgsIm5vbWUiOiJFc3RhYmVsZWNpbWVudG8gRXhlbXBsbyIsInN1YiI6ImZhMWI0OGNhLTRlZWUtNDRkYi05ZTZhLTM3Y2Y0ZDU4ZjFlYSIsInR5cCI6ImFjY2VzcyIsInV1aWQiOiJmYTFiNDhjYS00ZWVlLTQ0ZGItOWU2YS0zN2NmNGQ1OGYxZWEifQ.WSqZPBQdcLL6WA2hBgwBC5pz_v9ck7aTtBRSaT8qHOoIDH9nUb-u4XhrKD81LsX6hpVMY4MrprgZctAvao9M3A",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"account\": \"78901200\", //conta não existente\r\n\t\"amount\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/api/efetivar/transacao",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"efetivar",
+						"transacao"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

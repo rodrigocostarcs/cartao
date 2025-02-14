@@ -1,4 +1,4 @@
-defmodule Caju.Models.Contas do
+defmodule Caju.Contas do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -17,8 +17,8 @@ defmodule Caju.Models.Contas do
     |> validate_required([:nome_titular, :numero_conta])
   end
 
-  defimpl Jason.Encoder, for: Caju.Models.Contas do
-    def encode(%Caju.Models.Contas{} = conta, opts) do
+  defimpl Jason.Encoder, for: Caju.Contas do
+    def encode(%Caju.Contas{} = conta, opts) do
       conta
       |> Map.take([:id, :nome_titular, :numero_conta, :criado_em])
       |> Jason.Encode.map(opts)

@@ -2,13 +2,14 @@
 INSERT INTO contas (numero_conta, nome_titular) VALUES ('123456', 'João Silva');
 INSERT INTO contas (numero_conta, nome_titular) VALUES ('654321', 'Maria Oliveira');
 INSERT INTO contas (numero_conta, nome_titular) VALUES ('789012', 'Rodrigo Costa');
-""
-INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('FOOD', 'Benefício Alimentação');
-INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('MEAL', 'Benefício Refeição');
-INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('CASH', 'Benefício Dinheiro');
+
+INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('food', 'Benefício Alimentação');
+INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('meal', 'Benefício Refeição');
+INSERT INTO carteiras (tipo_beneficio, descricao) VALUES ('cash', 'Benefício Dinheiro');
 
 INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (1, 1, 1000.00, TRUE);
 INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (2, 2, 2000.00, TRUE);
+INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (3, 2, 3000.00, TRUE);
 INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (3, 3, 3000.00, TRUE);
 
 INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5411', 'Supermercado A');
