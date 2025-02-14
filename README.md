@@ -1,3 +1,6 @@
+# Caju - Modelo Relacional Banco de Ddados
+![Diagrama da Aplicação](diagrama.jpg)
+
 # Caju - Guia de Configuração e Execução
 
 ## Configuração do Ambiente MySQL no Ubuntu
@@ -102,3 +105,7 @@ A API estará disponível em: [http://127.0.0.1:4000](http://127.0.0.1:4000)
 ### Dica:
 Sempre verifique se o banco de dados está ativo antes de iniciar o servidor Phoenix.
 
+### L4. Questão aberta
+
+```Para garantir que apenas uma transação por conta fosse processada em um determinado momento, em uma transação síncrona, poderia ser utilizado um sistema de reserva de saldo, no qual a transação chegaria e, no primeiro passo, faria a reserva do saldo com base no valor da transação. Em seguida, seriam realizadas todas as validações necessárias e, no momento do lançamento, o saldo reservado seria descontado do saldo real e retirado do saldo reservado, sempre validando se o saldo reservado é maior ou igual ao valor da transação no momento do lançamento. No desafio proposto, implementei essa estrutura e também adicionei as operações dentro de uma transaction do Ecto, para garantir que, caso ocorra algum erro, seja dado rollback em todas as operações, incluindo na reserva do saldo, no lançamento na tabela de transações e no extrato.
+```
