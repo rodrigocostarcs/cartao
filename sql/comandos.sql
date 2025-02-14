@@ -9,18 +9,19 @@ DROP TABLE IF EXISTS contas;
 DROP TABLE IF EXISTS transacoes_food;
 DROP TABLE IF EXISTS transacoes_meal;
 DROP TABLE IF EXISTS transacoes_cash;
+DROP TABLE IF EXISTS estabelecimentos;
 SHOW TABLES;
 
 CREATE TABLE contas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero_conta VARCHAR(255) NOT NULL,
+    numero_conta VARCHAR(255) NOT NULL unique,
     nome_titular VARCHAR(255) NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE carteiras (
     id_carteira INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_beneficio ENUM('FOOD', 'MEAL', 'CASH') NOT NULL,
+    tipo_beneficio ENUM('food', 'meal', 'cash') NOT NULL,
     descricao VARCHAR(255),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -31,7 +32,7 @@ CREATE TABLE contas_carteiras (
     carteira_id INT NOT NULL,
     saldo DECIMAL(10, 2) NOT NULL,
     saldo_reservado DECIMAL(18,2) NOT NULL DEFAULT 0.00, -- Shadow balance
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (conta_id) REFERENCES contas(id),
@@ -40,7 +41,7 @@ CREATE TABLE contas_carteiras (
 
 CREATE TABLE mccs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo_mcc VARCHAR(255) NOT NULL,
+    codigo_mcc VARCHAR(255) NOT NULL unique,
     nome_estabelecimento VARCHAR(255) NOT NULL
 );
 
