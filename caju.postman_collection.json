@@ -73,7 +73,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5811\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 100.00,\r\n\t\"mcc\": \"5811\",\r\n\t\"estabelecimento\": \"Restaurante A\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,7 +115,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5812\",\r\n\t\"merchant\": \"Restaurante B\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 100.00,\r\n\t\"mcc\": \"5812\",\r\n\t\"estabelecimento\": \"Restaurante B\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -157,7 +157,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"123456\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5411\",\r\n\t\"merchant\": \"Supermercado A\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"123456\",\r\n\t\"valor\": 100.00,\r\n\t\"mcc\": \"5411\",\r\n\t\"estabelecimento\": \"Supermercado A\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,7 +199,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"123456\",\r\n\t\"amount\": 100.00,\r\n\t\"mcc\": \"5412\",\r\n\t\"merchant\": \"Supermercado B\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"123456\",\r\n\t\"valor\": 100.00,\r\n\t\"mcc\": \"5412\",\r\n\t\"estabelecimento\": \"Supermercado B\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -241,7 +241,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 2800.01, //a carteira meal nesse momento tinha 2800 e a cash 3000, após ficou 199.99\r\n\t\"mcc\": \"5811\",\r\n\t\"merchant\": \"Supermercado B\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 2800.01, //a carteira meal nesse momento tinha 2800 e a cash 3000, após ficou 199.99\r\n\t\"mcc\": \"5811\",\r\n\t\"estabelecimento\": \"Supermercado B\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -283,7 +283,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 100, //descontou da carteira cash porque não achou o mcc e nem o merchant\r\n\t\"mcc\": \"58191\",\r\n\t\"merchant\": \"Loja jp\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 100, //descontou da carteira cash porque não achou o mcc e nem o estabelecimento\r\n\t\"mcc\": \"58191\",\r\n\t\"estabelecimento\": \"Loja jp\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -313,7 +313,7 @@
 			"response": []
 		},
 		{
-			"name": "Efetivar Transação - Mapear por merchant",
+			"name": "Efetivar Transação - Mapear por estabelecimento",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -325,7 +325,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 0.55,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 0.55,\r\n\t\"mcc\": \"581911\",\r\n\t\"estabelecimento\": \"Restaurante A\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -367,7 +367,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"789012\",\r\n\t\"amount\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"789012\",\r\n\t\"valor\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"estabelecimento\": \"Restaurante A\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -409,7 +409,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"account\": \"78901200\", //conta não existente\r\n\t\"amount\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"merchant\": \"Restaurante A\"\r\n}",
+					"raw": "{\r\n\t\"conta\": \"78901200\", //conta não existente\r\n\t\"valor\": 2900,\r\n\t\"mcc\": \"581911\",\r\n\t\"estabelecimento\": \"Restaurante A\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

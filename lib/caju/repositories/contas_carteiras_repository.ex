@@ -2,7 +2,7 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
   import Ecto.Query, warn: false
   alias Caju.{Repo, ContasCarteiras, Extratos}
 
-  def get_carteiras_by_conta_id(conta_id) do
+  def buscar_carteiras_por_conta_id(conta_id) do
     from(cc in ContasCarteiras,
       where: cc.conta_id == ^conta_id,
       preload: [:conta, carteira: [:mccs]]
@@ -10,12 +10,12 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
     |> Repo.all()
   end
 
-  def possui_carteira_cash_e_saldo?(conta_id, amount) do
-    amount_decimal = Decimal.new(to_string(amount))
+  def possui_carteira_cash_e_saldo?(conta_id, valor) do
+    valor_decimal = Decimal.new(to_string(valor))
 
     query =
       from cc in ContasCarteiras,
-        where: cc.conta_id == ^conta_id and cc.saldo - cc.saldo_reservado >= ^amount_decimal,
+        where: cc.conta_id == ^conta_id and cc.saldo - cc.saldo_reservado >= ^valor_decimal,
         preload: [:conta, carteira: [:mccs]]
 
     case Repo.one(query) do
@@ -27,15 +27,15 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
     end
   end
 
-  def reservar_saldo(conta_carteira, amount) do
-    amount_decimal = Decimal.new(to_string(amount))
+  def reservar_saldo(conta_carteira, valor) do
+    valor_decimal = Decimal.new(to_string(valor))
 
     query =
       from cc in ContasCarteiras,
         where:
           cc.id == ^conta_carteira.id and cc.conta_id == ^conta_carteira.conta_id and
-            cc.saldo - cc.saldo_reservado >= ^amount_decimal,
-        update: [inc: [saldo_reservado: ^amount_decimal]]
+            cc.saldo - cc.saldo_reservado >= ^valor_decimal,
+        update: [inc: [saldo_reservado: ^valor_decimal]]
 
     case Repo.update_all(query, []) do
       {count, _} when count > 0 ->
@@ -46,25 +46,25 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
     end
   end
 
-  def lancar_transacao(conta_carteira, amount, merchant) do
-    amount_decimal = Decimal.new(to_string(amount))
-    negative_amount = Decimal.negate(amount_decimal)
+  def lancar_transacao(conta_carteira, valor, estabelecimento) do
+    valor_decimal = Decimal.new(to_string(valor))
+    negative_valor = Decimal.negate(valor_decimal)
 
     query =
       from cc in ContasCarteiras,
         where:
           cc.id == ^conta_carteira.id and cc.conta_id == ^conta_carteira.conta_id and
-            cc.saldo_reservado >= ^amount_decimal,
-        update: [inc: [saldo: ^negative_amount, saldo_reservado: ^negative_amount]]
+            cc.saldo_reservado >= ^valor_decimal,
+        update: [inc: [saldo: ^negative_valor, saldo_reservado: ^negative_valor]]
 
     Repo.transaction(fn ->
       case Repo.update_all(query, []) do
         {count, _} when count > 0 ->
           extrato = %Extratos{
-            debito: amount_decimal,
+            debito: valor_decimal,
             credito: Decimal.new("0.00"),
             data_transacao: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
-            descricao: "Transação de débito #{merchant}",
+            descricao: "Transação de débito #{estabelecimento}",
             id_conta: conta_carteira.conta_id,
             id_carteira: conta_carteira.carteira_id
           }

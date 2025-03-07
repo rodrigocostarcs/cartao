@@ -1,10 +1,10 @@
 defmodule Caju.Services.MccsService do
   alias Caju.Repositories.MccsRepository
 
-  def buscar_mccs(mcc, merchant) do
-    case MccsRepository.pegar_mcc_by_codigo(mcc) do
+  def buscar_mccs(mcc, estabelecimento) do
+    case MccsRepository.pegar_mcc_por_codigo(mcc) do
       nil ->
-        case MccsRepository.pegar_mcc_merchant(merchant) do
+        case MccsRepository.pegar_mcc_estabelecimento(estabelecimento) do
           [] -> {:error, :mcc_nao_encontrado}
           mcc -> valida_quantidade_mccs(mcc)
         end

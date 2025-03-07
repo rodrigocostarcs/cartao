@@ -3,15 +3,15 @@ defmodule CajuWeb.TransacaoController do
   alias Caju.Services.TransacaoService
 
   def efetivar_transacao(conn, %{
-        "account" => account,
-        "amount" => amount,
+        "conta" => conta,
+        "valor" => valor,
         "mcc" => mcc,
-        "merchant" => merchant
+        "estabelecimento" => estabelecimento
       }) do
-    case TransacaoService.buscar_carteira_por_conta(account) do
+    case TransacaoService.buscar_carteira_por_conta(conta) do
       {:ok, carteiras} ->
         code =
-          TransacaoService.efetivar_transacao(carteiras, amount, mcc, merchant)
+          TransacaoService.efetivar_transacao(carteiras, valor, mcc, estabelecimento)
           |> pegar_codigo_transacao()
 
         conn
