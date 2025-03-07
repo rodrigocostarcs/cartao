@@ -2,34 +2,36 @@ defmodule Caju.Services.ContasCarteirasService do
   alias Caju.Repositories.ContasCarteirasRepository
   alias Caju.Repositories.TransacoesRepository
 
-  def saldo_suficiente?(carteiras, valor, mcc, {:ok, mccs_retorno}) do
+  def saldo_suficiente?(carteiras, valor, _mcc, {:ok, mcc_retorno}) do
     valor_decimal = Decimal.new(to_string(valor))
 
-    mccs_retorno_lista =
-      case mccs_retorno do
-        [%_{} | _] -> mccs_retorno
-        %_{} -> [mccs_retorno]
-      end
-
-    carteira_mcc_valida =
+    carteira_correspondente =
       Enum.find(carteiras, fn carteira ->
-        Enum.any?(carteira.carteira.mccs, fn mcc_associado ->
-          Enum.any?(mccs_retorno_lista, fn mcc_retorno ->
-            mcc_associado.codigo_mcc == mcc_retorno.codigo_mcc
-          end)
-        end) and Decimal.compare(carteira.saldo, valor_decimal) != :lt
+        campo_permitido =
+          case carteira.carteira.tipo_beneficio do
+            :food -> mcc_retorno.permite_food
+            :meal -> mcc_retorno.permite_meal
+            :cash -> mcc_retorno.permite_cash
+            _ -> false
+          end
+
+        saldo_disponivel = Decimal.sub(carteira.saldo, carteira.saldo_reservado)
+        campo_permitido and Decimal.compare(saldo_disponivel, valor_decimal) != :lt
       end)
 
-    if carteira_mcc_valida do
+    if carteira_correspondente do
       {:retorno_mcc, true}
     else
-      carteira_cash_valida =
+      carteira_cash =
         Enum.find(carteiras, fn carteira ->
-          carteira.carteira.tipo_beneficio == :cash and
-            Decimal.compare(carteira.saldo, valor_decimal) != :lt
+          eh_cash = carteira.carteira.tipo_beneficio == :cash
+          saldo_disponivel = Decimal.sub(carteira.saldo, carteira.saldo_reservado)
+          saldo_suficiente = Decimal.compare(saldo_disponivel, valor_decimal) != :lt
+
+          eh_cash and saldo_suficiente
         end)
 
-      if carteira_cash_valida do
+      if carteira_cash do
         {:carteira_cash, true}
       else
         {:error, :saldo_insuficiente}
@@ -37,17 +39,19 @@ defmodule Caju.Services.ContasCarteirasService do
     end
   end
 
-  # Essa cláusula nova é específica para tratar o caso do MCC não encontrado
   def saldo_suficiente?(carteiras, valor, _mcc, {:error, :mcc_nao_encontrado}) do
     valor_decimal = Decimal.new(to_string(valor))
 
-    carteira_cash_valida =
+    carteira_cash =
       Enum.find(carteiras, fn carteira ->
-        carteira.carteira.tipo_beneficio == :cash and
-          Decimal.compare(carteira.saldo, valor_decimal) != :lt
+        eh_cash = carteira.carteira.tipo_beneficio == :cash
+        saldo_disponivel = Decimal.sub(carteira.saldo, carteira.saldo_reservado)
+        saldo_suficiente = Decimal.compare(saldo_disponivel, valor_decimal) != :lt
+
+        eh_cash and saldo_suficiente
       end)
 
-    if carteira_cash_valida do
+    if carteira_cash do
       {:carteira_cash, true}
     else
       {:error, :saldo_insuficiente}
@@ -100,32 +104,27 @@ defmodule Caju.Services.ContasCarteirasService do
     ContasCarteirasRepository.reservar_saldo(conta_carteira, valor)
   end
 
-  def lancar_transacao(conta_carteira, valor, _mcc, estabelecimento) do
+  def lancar_transacao(conta_carteira, valor, mcc, estabelecimento) do
     case ContasCarteirasRepository.lancar_transacao(conta_carteira, valor, estabelecimento) do
       {:ok, _} ->
-        gravar_transacao(conta_carteira, valor)
+        gravar_transacao(conta_carteira, valor, mcc, estabelecimento)
 
       _ ->
         {:error, :saldo_insuficiente}
     end
   end
 
-  defp gravar_transacao(conta_carteira, valor) do
-    case tipo_transacao(conta_carteira.carteira.tipo_beneficio, conta_carteira, valor) do
+  defp gravar_transacao(conta_carteira, valor, mcc, estabelecimento) do
+    case TransacoesRepository.lancar_transacao(
+           conta_carteira,
+           "debito",
+           "confirmado",
+           valor,
+           estabelecimento,
+           mcc
+         ) do
       {:ok, _} -> {:ok, "00"}
       _ -> {:error, :saldo_insuficiente}
     end
-  end
-
-  defp tipo_transacao(:cash, conta_carteira, valor) do
-    TransacoesRepository.lancar_transacoes_cash(conta_carteira, "debito", "confirmado", valor)
-  end
-
-  defp tipo_transacao(:meal, conta_carteira, valor) do
-    TransacoesRepository.lancar_transacoes_meal(conta_carteira, "debito", "confirmado", valor)
-  end
-
-  defp tipo_transacao(:food, conta_carteira, valor) do
-    TransacoesRepository.lancar_transacoes_food(conta_carteira, "debito", "confirmado", valor)
   end
 end

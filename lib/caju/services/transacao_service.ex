@@ -15,21 +15,56 @@ defmodule Caju.Services.TransacaoService do
     end
   end
 
-  def efetivar_transacao(carteiras, valor, mcc, estabelecimento) do
+  def efetivar_transacao(carteiras, valor, mcc_codigo_original, estabelecimento) do
     Repo.transaction(fn ->
-      mccs = buscar_mccs(mcc, estabelecimento)
+      mcc_resultado = buscar_mccs(mcc_codigo_original, estabelecimento)
+
+      {mcc_codigo_correto, nome_estabelecimento_correto} =
+        case mcc_resultado do
+          {:ok, mcc} -> {mcc.codigo_mcc, mcc.nome_estabelecimento}
+          _ -> {mcc_codigo_original, estabelecimento}
+        end
 
       with {:ok, {mccs, saldo}} <-
-             valida_saldo_carteiras(mccs, carteiras, valor, mcc, estabelecimento),
+             valida_saldo_carteiras(
+               mcc_resultado,
+               carteiras,
+               valor,
+               mcc_codigo_original,
+               estabelecimento
+             ),
            {:ok, carteira} <-
-             autorizador_simples({mccs, saldo}, carteiras, valor, mcc, estabelecimento)
-             |> autorizador_com_fallback(carteiras, valor, mcc, estabelecimento),
+             autorizador_simples(
+               {mccs, saldo},
+               carteiras,
+               valor,
+               mcc_codigo_correto,
+               nome_estabelecimento_correto
+             )
+             |> autorizador_com_fallback(
+               carteiras,
+               valor,
+               mcc_codigo_correto,
+               nome_estabelecimento_correto
+             ),
            {:ok, conta_carteira} <- buscar_conta_carteira(carteiras, carteira),
            {:ok, conta_carteira} <-
-             reserva_de_saldo({:ok, conta_carteira}, carteiras, valor, mcc, estabelecimento),
-           {:ok, conta_carteira} <-
-             lancar_transacao({:ok, conta_carteira}, carteiras, valor, mcc, estabelecimento) do
-        {:ok, conta_carteira}
+             reserva_de_saldo(
+               {:ok, conta_carteira},
+               carteiras,
+               valor,
+               mcc_codigo_correto,
+               nome_estabelecimento_correto
+             ),
+           {:ok, codigo} <-
+             lancar_transacao(
+               {:ok, conta_carteira},
+               carteiras,
+               valor,
+               mcc_codigo_correto,
+               nome_estabelecimento_correto
+             ) do
+        {:ok, codigo}
       else
         {:error, reason} ->
           Repo.rollback(reason)
@@ -44,15 +79,24 @@ defmodule Caju.Services.TransacaoService do
     end
   end
 
-  defp autorizador_simples({_mccs, false}, _carteiras, _valor, _mcc, _estabelecimento),
-    do: {:error, :mcc_nao_encontrado_e_sem_saldo}
+  defp autorizador_simples(
+         {{:error, _motivo}, false},
+         _carteiras,
+         _valor,
+         _mcc,
+         _estabelecimento
+       ),
+       do: {:error, :mcc_nao_encontrado_e_sem_saldo}
 
-  defp autorizador_simples({{:ok, mccs}, true}, carteiras, _valor, mcc, estabelecimento) do
+  defp autorizador_simples({{:ok, mccs}, true}, carteiras, _valor, _mcc, _estabelecimento) do
     carteira_valida =
       Enum.find(carteiras, fn carteira ->
-        Enum.any?(carteira.carteira.mccs, fn mcc_associado ->
-          mcc_associado.codigo_mcc == mcc or mcc_associado.nome_estabelecimento == estabelecimento
-        end)
+        case carteira.carteira.tipo_beneficio do
+          :food -> mccs.permite_food
+          :meal -> mccs.permite_meal
+          :cash -> mccs.permite_cash
+          _ -> false
+        end
       end)
 
     if carteira_valida do
@@ -113,12 +157,9 @@ defmodule Caju.Services.TransacaoService do
   defp reserva_de_saldo({:error, code}, _carteiras, _valor, _mcc, _estabelecimento),
     do: {:error, code}
 
-  defp lancar_transacao({:ok, carteira}, _carteiras, valor, _mcc, estabelecimento) do
-    ContasCarteirasService.lancar_transacao(carteira, valor, _mcc, estabelecimento)
+  defp lancar_transacao({:ok, carteira}, _carteiras, valor, mcc_codigo, estabelecimento) do
+    ContasCarteirasService.lancar_transacao(carteira, valor, mcc_codigo, estabelecimento)
   end
-
-  defp lancar_transacao({:error, code}, _carteiras, _valor, _mcc, _estabelecimento),
-    do: {:error, code}
 
   defp lancar_transacao(
          {:error, :saldo_insuficiente},
@@ -128,4 +169,7 @@ defmodule Caju.Services.TransacaoService do
          _estabelecimento
        ),
        do: {:error, :saldo_insuficiente}
+
+  defp lancar_transacao({:error, code}, _carteiras, _valor, _mcc, _estabelecimento),
+    do: {:error, code}
 end

@@ -12,22 +12,21 @@ INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (2, 2,
 INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (3, 2, 3000.00, TRUE);
 INSERT INTO contas_carteiras (conta_id, carteira_id, saldo, ativo) VALUES (3, 3, 3000.00, TRUE);
 
-INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5411', 'Supermercado A');
-INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5412', 'Supermercado B');
-INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5811', 'Restaurante A');
-INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5812', 'Restaurante B');
-INSERT INTO mccs (codigo_mcc, nome_estabelecimento) VALUES ('5999', 'Loja de Conveniência');
+-- Inserir MCCs com as permissões de tipos de carteira
+INSERT INTO mccs (codigo_mcc, nome_estabelecimento, permite_food, permite_meal, permite_cash) 
+VALUES ('5411', 'Supermercado A', TRUE, FALSE, FALSE);
 
--- Associando MCCs de FOOD
-INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (1, 1); -- Supermercado A
-INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (1, 2); -- Supermercado B
+INSERT INTO mccs (codigo_mcc, nome_estabelecimento, permite_food, permite_meal, permite_cash) 
+VALUES ('5412', 'Supermercado B', TRUE, FALSE, FALSE);
 
--- Associando MCCs de MEAL
-INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (2, 3); -- Restaurante A
-INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (2, 4); -- Restaurante B
+INSERT INTO mccs (codigo_mcc, nome_estabelecimento, permite_food, permite_meal, permite_cash) 
+VALUES ('5811', 'Restaurante A', FALSE, TRUE, FALSE);
 
--- Associando MCCs de CASH
-INSERT INTO carteiras_mccs (carteira_id, mcc_id) VALUES (3, 5); -- Loja de Conveniência
+INSERT INTO mccs (codigo_mcc, nome_estabelecimento, permite_food, permite_meal, permite_cash) 
+VALUES ('5812', 'Restaurante B', FALSE, TRUE, FALSE);
+
+INSERT INTO mccs (codigo_mcc, nome_estabelecimento, permite_food, permite_meal, permite_cash) 
+VALUES ('5999', 'Loja de Conveniência', FALSE, FALSE, TRUE);
 
 INSERT INTO estabelecimentos (nome_estabelecimento, senha_hash, uuid)  -- senha = "senha_secreta"
 VALUES ('Estabelecimento Exemplo', '$pbkdf2-sha512$160000$/CrIInlvYGHTbkQQ2H8jaQ$0GhMgH2tWaypbZfGGy5AKUviZTBeo9Yd4VHZQyKtWhmuFZG/4CMxowQMMJGFh5lLIThBzr7qOIX2aPS.bQ120w', 'fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea');

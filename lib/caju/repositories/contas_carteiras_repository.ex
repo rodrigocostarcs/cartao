@@ -5,7 +5,7 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
   def buscar_carteiras_por_conta_id(conta_id) do
     from(cc in ContasCarteiras,
       where: cc.conta_id == ^conta_id,
-      preload: [:conta, carteira: [:mccs]]
+      preload: [:conta, :carteira]
     )
     |> Repo.all()
   end
