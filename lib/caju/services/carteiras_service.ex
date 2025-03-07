@@ -5,10 +5,10 @@ defmodule Caju.Services.CarteirasService do
     defstruct [:id, :saldo, :conta]
   end
 
-  def get_carteira_by_conta(conta_numero) do
-    case pegar_conta_by_numero(conta_numero) do
+  def pegar_carteira_por_conta(conta_numero) do
+    case pegar_conta_por_numero(conta_numero) do
       {:ok, conta} ->
-        carteiras = ContasCarteirasRepository.get_carteiras_by_conta_id(conta.id)
+        carteiras = ContasCarteirasRepository.buscar_carteiras_por_conta_id(conta.id)
         {:ok, carteiras}
 
       :no_content ->
@@ -16,7 +16,7 @@ defmodule Caju.Services.CarteirasService do
     end
   end
 
-  def pegar_conta_by_numero(conta_numero) do
-    ContasServices.pegar_conta_by_numero(conta_numero)
+  def pegar_conta_por_numero(conta_numero) do
+    ContasServices.pegar_conta_por_numero(conta_numero)
   end
 end

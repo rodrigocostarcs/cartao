@@ -7,8 +7,8 @@ defmodule Caju.Guardian do
   end
 
   def resource_from_claims(%{"sub" => uuid}) do
-    case EstabelecimentosService.get_estabelecimento_uuid(uuid) do
-      nil -> {:error, :resource_not_found}
+    case EstabelecimentosService.pegar_estabelecimento_por_uuid(uuid) do
+      :no_content -> {:error, :resource_not_found}
       estabelecimento -> {:ok, estabelecimento}
     end
   end

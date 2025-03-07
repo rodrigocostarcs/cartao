@@ -1,8 +1,8 @@
 defmodule Caju.ContasServices do
   alias Caju.Repositories.ContasRepository
 
-  def pegar_conta_by_id(id) do
-    conta = ContasRepository.pegar_conta_by_id(id)
+  def pegar_conta_por_id(id) do
+    conta = ContasRepository.pegar_conta_por_id(id)
 
     case conta do
       nil -> :no_content
@@ -10,8 +10,8 @@ defmodule Caju.ContasServices do
     end
   end
 
-  def pegar_conta_by_numero(numero) do
-    conta = ContasRepository.pegar_conta_by_numero(numero)
+  def pegar_conta_por_numero(numero) do
+    conta = ContasRepository.pegar_conta_por_numero(numero)
 
     case conta do
       nil -> :no_content

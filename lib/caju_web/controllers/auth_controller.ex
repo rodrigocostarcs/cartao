@@ -4,7 +4,7 @@ defmodule CajuWeb.AuthController do
   alias Caju.Guardian
 
   def login(conn, %{"uuid" => uuid, "senha" => senha}) do
-    case EstabelecimentosService.authenticate(uuid, senha) do
+    case EstabelecimentosService.autenticar(uuid, senha) do
       {:ok, estabelecimento} ->
         claims = %{
           "nome" => estabelecimento.nome_estabelecimento,

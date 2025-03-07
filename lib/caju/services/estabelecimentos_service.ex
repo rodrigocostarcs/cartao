@@ -1,8 +1,8 @@
 defmodule Caju.Services.EstabelecimentosService do
   alias Caju.Repositories.EstabelecimentosRepository
 
-  def get_estabelecimento_uuid(uuid) do
-    estabelecimento = EstabelecimentosRepository.get_estabelecimento_uuid(uuid)
+  def pegar_estabelecimento_por_uuid(uuid) do
+    estabelecimento = EstabelecimentosRepository.pegar_estabelecimento_por_uuid(uuid)
 
     case estabelecimento do
       nil -> :no_content
@@ -10,8 +10,8 @@ defmodule Caju.Services.EstabelecimentosService do
     end
   end
 
-  def authenticate(uuid, senha) do
-    case EstabelecimentosRepository.get_estabelecimento_uuid(uuid) do
+  def autenticar(uuid, senha) do
+    case EstabelecimentosRepository.pegar_estabelecimento_por_uuid(uuid) do
       nil ->
         :error
 
