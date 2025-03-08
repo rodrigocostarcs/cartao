@@ -9,7 +9,7 @@ SELECT cc.id, cc.conta_id, c.numero_conta, c.nome_titular, cc.carteira_id, ca.ti
        cc.saldo, cc.saldo_reservado, cc.ativo, cc.criado_em, cc.atualizado_em 
 FROM contas_carteiras cc 
 JOIN contas c ON cc.conta_id = c.id 
-JOIN carteiras ca ON cc.carteira_id = ca.id_carteira;
+JOIN carteiras ca ON cc.carteira_id = ca.id;
 
 -- 4. Consultar todos os MCCs:
 SELECT * FROM mccs;
@@ -21,10 +21,10 @@ WHERE m.permite_food = TRUE;
 
 -- 6. Consultar todos os extratos e trazer os dados da conta e da carteira relacionadas:
 SELECT e.id, e.debito, e.credito, e.id_conta, c.numero_conta, c.nome_titular, 
-       e.id_carteira, ca.tipo_beneficio, e.data_transacao, e.descricao
+       e.id, ca.tipo_beneficio, e.data_transacao, e.descricao
 FROM extratos e
 JOIN contas c ON e.id_conta = c.id
-JOIN carteiras ca ON e.id_carteira = ca.id_carteira;
+JOIN carteiras ca ON e.id = ca.id;
 
 -- 7. Consultar todas as transações:
 SELECT * FROM transacoes;
@@ -33,7 +33,7 @@ SELECT * FROM transacoes;
 SELECT t.*, c.nome_titular, ca.tipo_beneficio
 FROM transacoes t
 JOIN contas c ON t.conta_id = c.id
-JOIN carteiras ca ON t.carteira_id = ca.id_carteira
+JOIN carteiras ca ON t.carteira_id = ca.id
 WHERE ca.tipo_beneficio = 'food';
 
 -- 9. Consultar todos os estabelecimentos:
@@ -49,13 +49,13 @@ SELECT c.numero_conta, c.nome_titular, ca.tipo_beneficio,
        cc.saldo, cc.saldo_reservado, (cc.saldo - cc.saldo_reservado) AS saldo_disponivel
 FROM contas_carteiras cc
 JOIN contas c ON cc.conta_id = c.id
-JOIN carteiras ca ON cc.carteira_id = ca.id_carteira
+JOIN carteiras ca ON cc.carteira_id = ca.id
 WHERE cc.ativo = TRUE;
 
 -- 12. Consultar o histórico de transações de uma conta específica:
 SELECT t.*, ca.tipo_beneficio
 FROM transacoes t
-JOIN carteiras ca ON t.carteira_id = ca.id_carteira
+JOIN carteiras ca ON t.carteira_id = ca.id
 WHERE t.conta_id = 1
 ORDER BY t.criado_em DESC;
 
@@ -72,7 +72,7 @@ ORDER BY valor_total DESC;
 SELECT t.*, c.nome_titular, ca.tipo_beneficio
 FROM transacoes t
 JOIN contas c ON t.conta_id = c.id
-JOIN carteiras ca ON t.carteira_id = ca.id_carteira
+JOIN carteiras ca ON t.carteira_id = ca.id
 WHERE t.criado_em BETWEEN '2023-01-01' AND '2023-12-31'
 ORDER BY t.criado_em DESC;
 

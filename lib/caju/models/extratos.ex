@@ -10,14 +10,14 @@ defmodule Caju.Extratos do
     field :descricao, :string
 
     belongs_to :conta, Caju.Contas, foreign_key: :id_conta
-    belongs_to :carteira, Caju.Carteiras, foreign_key: :id_carteira, references: :id_carteira
+    belongs_to :carteira, Caju.Carteiras, foreign_key: :carteira_id, references: :id
   end
 
   @doc false
   def changeset(extrato, attrs) do
     extrato
-    |> cast(attrs, [:debito, :credito, :id_conta, :data_transacao, :descricao, :id_carteira])
-    |> validate_required([:id_conta, :data_transacao, :id_carteira])
+    |> cast(attrs, [:debito, :credito, :id_conta, :carteira_id, :data_transacao, :descricao])
+    |> validate_required([:id_conta, :carteira_id, :data_transacao])
     |> assoc_constraint(:conta)
     |> assoc_constraint(:carteira)
   end

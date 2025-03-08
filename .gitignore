@@ -35,3 +35,11 @@ caju-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Docker volumes
+/mysql-data/
+
+# Node modules gerenciados pelo Docker
+/node_modules/
+
+# Arquivos temporários do Docker
+.dockerignore

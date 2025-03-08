@@ -3,15 +3,21 @@ defmodule Caju.ContasCarteiras do
   import Ecto.Changeset
 
   @primary_key {:id, :id, autogenerate: true}
+
   schema "contas_carteiras" do
     field :saldo, :decimal
-    field :saldo_reservado, :decimal, default: 0.00
-    field :ativo, :boolean, default: true
-    field :criado_em, :naive_datetime
+    field :saldo_reservado, :decimal, default: Decimal.new("0.00")
+
+    field :ativo, :boolean
     field :atualizado_em, :naive_datetime
+    field :criado_em, :naive_datetime
 
     belongs_to :conta, Caju.Contas, foreign_key: :conta_id
-    belongs_to :carteira, Caju.Carteiras, foreign_key: :carteira_id, references: :id_carteira
+
+    belongs_to :carteira, Caju.Carteiras,
+      foreign_key: :carteira_id,
+      references: :id,
+      type: :integer
   end
 
   @doc false
