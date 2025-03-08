@@ -1,12 +1,11 @@
-alias Caju.Repo
-alias Caju.Contas
-alias Caju.Carteiras
-alias Caju.ContasCarteiras
-alias Caju.Mccs
-alias Caju.Estabelecimentos
+defmodule Caju.Seeds.SeedData do
+  alias Caju.Repo
+  alias Caju.Contas
+  alias Caju.Carteiras
+  alias Caju.ContasCarteiras
+  alias Caju.Mccs
+  alias Caju.Estabelecimentos
 
-# Função para inserir dados de teste
-defmodule SeedData do
   def insert_seed_data do
     # Limpar todas as tabelas antes de inserir
     Repo.delete_all(ContasCarteiras)
@@ -158,11 +157,10 @@ end
 # Executar a inserção de dados de teste
 case Mix.env() do
   :test ->
-    SeedData.insert_seed_data()
-    IO.puts("Seeds de teste inseridos com sucesso!")
+    IO.puts("Seeds de teste podem ser carregados no setup do teste")
 
   :dev ->
-    SeedData.insert_seed_data()
+    Caju.Seeds.SeedData.insert_seed_data()
     IO.puts("Seeds de desenvolvimento inseridos com sucesso!")
 
   _ ->
