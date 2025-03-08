@@ -2,7 +2,7 @@ defmodule Caju.Carteiras do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id_carteira, :integer, [source: :id_carteira]}
+  @primary_key {:id, :id, autogenerate: true}
 
   schema "carteiras" do
     field :tipo_beneficio, Ecto.Enum, values: [:food, :meal, :cash]
@@ -15,6 +15,6 @@ defmodule Caju.Carteiras do
     carteira
     |> cast(attrs, [:tipo_beneficio, :descricao])
     |> validate_required([:tipo_beneficio, :descricao])
-    |> validate_inclusion(:tipo_beneficio, in: [:food, :meal, :cash])
+    |> validate_inclusion(:tipo_beneficio, [:food, :meal, :cash])
   end
 end

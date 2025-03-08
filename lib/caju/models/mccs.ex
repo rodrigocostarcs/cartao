@@ -1,9 +1,9 @@
-# lib/caju/models/mccs.ex
 defmodule Caju.Mccs do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :id, autogenerate: true}
+
   schema "mccs" do
     field :codigo_mcc, :string
     field :nome_estabelecimento, :string

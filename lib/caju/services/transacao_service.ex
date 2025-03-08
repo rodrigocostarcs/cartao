@@ -73,7 +73,7 @@ defmodule Caju.Services.TransacaoService do
   end
 
   defp buscar_conta_carteira(carteiras, carteira) do
-    case Enum.find(carteiras, fn c -> c.carteira_id == carteira.id_carteira end) do
+    case Enum.find(carteiras, fn c -> c.carteira_id == carteira.id end) do
       nil -> {:error, :conta_carteira_nao_encontrada}
       conta_carteira -> {:ok, conta_carteira}
     end

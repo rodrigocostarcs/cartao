@@ -7,7 +7,7 @@ import Config
 # Run `mix help test` for more information.
 config :caju, Caju.Repo,
   username: "root",
-  password: "",
+  password: "Caju@1234",
   hostname: "localhost",
   database: "caju_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,

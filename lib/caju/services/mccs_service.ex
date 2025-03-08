@@ -12,9 +12,9 @@ defmodule Caju.Services.MccsService do
       [mcc_encontrado] ->
         {:ok, mcc_encontrado}
 
-      # Se encontrar múltiplos MCCs pelo nome do estabelecimento pega o primeiro como "principal".
-      [mcc_principal | _outros] when length([mcc_principal | _outros]) > 1 ->
-        {:ok, mcc_principal}
+      # Se encontrar múltiplos MCCs, pega o primeiro como "principal"
+      mccs_lista when length(mccs_lista) > 1 ->
+        {:ok, List.first(mccs_lista)}
 
       # Se não encontrar pelo nome do estabelecimento, tenta pelo código MCC
       [] ->
@@ -25,6 +25,10 @@ defmodule Caju.Services.MccsService do
     end
   end
 
+  @doc """
+  Busca MCCs por tipo de benefício.
+  Retorna {:ok, mccs} se encontrar, {:error, :nenhum_mcc_encontrado} caso contrário.
+  """
   def buscar_mccs_por_tipo(tipo_beneficio) do
     mccs = MccsRepository.pegar_mccs_por_tipo(tipo_beneficio)
 
@@ -32,16 +36,5 @@ defmodule Caju.Services.MccsService do
       [] -> {:error, :nenhum_mcc_encontrado}
       mccs -> {:ok, mccs}
     end
-  end
-
-  def criar_ou_atualizar_mcc(attrs) do
-    case MccsRepository.pegar_mcc_por_codigo(attrs.codigo_mcc) do
-      nil -> MccsRepository.criar_mcc(attrs)
-      mcc -> MccsRepository.atualizar_mcc(mcc, attrs)
-    end
-  end
-
-  def excluir_mcc(id) do
-    MccsRepository.excluir_mcc(id)
   end
 end

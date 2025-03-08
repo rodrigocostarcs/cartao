@@ -12,7 +12,7 @@ defmodule Caju.Transacoes do
     field :criado_em, :naive_datetime
 
     belongs_to :conta, Caju.Contas, foreign_key: :conta_id
-    belongs_to :carteira, Caju.Carteiras, foreign_key: :carteira_id, references: :id_carteira
+    belongs_to :carteira, Caju.Carteiras, foreign_key: :carteira_id, references: :id
   end
 
   @doc false

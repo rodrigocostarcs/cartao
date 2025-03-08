@@ -66,7 +66,7 @@ defmodule Caju.Repositories.ContasCarteirasRepository do
             data_transacao: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
             descricao: "Transação de débito #{estabelecimento}",
             id_conta: conta_carteira.conta_id,
-            id_carteira: conta_carteira.carteira_id
+            carteira_id: conta_carteira.carteira_id
           }
 
           case Repo.insert(extrato) do

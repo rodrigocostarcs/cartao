@@ -17,7 +17,7 @@ CREATE TABLE contas (
 );
 
 CREATE TABLE carteiras (
-    id_carteira INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     tipo_beneficio ENUM('food', 'meal', 'cash') NOT NULL,
     descricao VARCHAR(255),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -33,7 +33,7 @@ CREATE TABLE contas_carteiras (
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (conta_id) REFERENCES contas(id),
-    FOREIGN KEY (carteira_id) REFERENCES carteiras(id_carteira)
+    FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );
 
 CREATE TABLE mccs (
@@ -54,9 +54,9 @@ CREATE TABLE extratos (
     id_conta INT NOT NULL,
     data_transacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     descricao VARCHAR(255),
-    id_carteira INT NOT NULL,
+    carteira_id INT NOT NULL,
     FOREIGN KEY (id_conta) REFERENCES contas(id),
-    FOREIGN KEY (id_carteira) REFERENCES carteiras(id_carteira)
+    FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );
 
 CREATE TABLE transacoes (
@@ -70,7 +70,7 @@ CREATE TABLE transacoes (
     mcc_codigo VARCHAR(255),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (conta_id) REFERENCES contas(id),
-    FOREIGN KEY (carteira_id) REFERENCES carteiras(id_carteira)
+    FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );
 
 CREATE TABLE estabelecimentos (

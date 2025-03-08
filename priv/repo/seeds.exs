@@ -1,11 +1,162 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Caju.Repo.insert!(%Caju.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias Caju.Repo
+alias Caju.Contas
+alias Caju.Carteiras
+alias Caju.ContasCarteiras
+alias Caju.Mccs
+alias Caju.Estabelecimentos
+
+# Função para inserir dados de teste
+defmodule SeedData do
+  def insert_test_data do
+    # Limpar todas as tabelas antes de inserir
+    Repo.delete_all(ContasCarteiras)
+    Repo.delete_all(Contas)
+    Repo.delete_all(Carteiras)
+    Repo.delete_all(Mccs)
+    Repo.delete_all(Estabelecimentos)
+
+    # Inserir contas com números de conta únicos
+    {:ok, conta1} =
+      %Contas{}
+      |> Contas.changeset(%{
+        numero_conta: "123456-#{:os.system_time()}",
+        nome_titular: "João Silva"
+      })
+      |> Repo.insert()
+
+    {:ok, conta2} =
+      %Contas{}
+      |> Contas.changeset(%{
+        numero_conta: "654321-#{:os.system_time()}",
+        nome_titular: "Maria Oliveira"
+      })
+      |> Repo.insert()
+
+    {:ok, conta3} =
+      %Contas{}
+      |> Contas.changeset(%{
+        numero_conta: "789012-#{:os.system_time()}",
+        nome_titular: "Rodrigo Costa"
+      })
+      |> Repo.insert()
+
+    # Inserir carteiras
+    {:ok, food_wallet} =
+      %Carteiras{}
+      |> Carteiras.changeset(%{tipo_beneficio: :food, descricao: "Benefício Alimentação"})
+      |> Repo.insert()
+
+    {:ok, meal_wallet} =
+      %Carteiras{}
+      |> Carteiras.changeset(%{tipo_beneficio: :meal, descricao: "Benefício Refeição"})
+      |> Repo.insert()
+
+    {:ok, cash_wallet} =
+      %Carteiras{}
+      |> Carteiras.changeset(%{tipo_beneficio: :cash, descricao: "Benefício Dinheiro"})
+      |> Repo.insert()
+
+    # Inserir contas_carteiras
+    %ContasCarteiras{}
+    |> ContasCarteiras.changeset(%{
+      conta_id: conta1.id,
+      carteira_id: food_wallet.id,
+      saldo: Decimal.new("1000.00"),
+      ativo: true
+    })
+    |> Repo.insert()
+
+    %ContasCarteiras{}
+    |> ContasCarteiras.changeset(%{
+      conta_id: conta2.id,
+      carteira_id: meal_wallet.id,
+      saldo: Decimal.new("2000.00"),
+      ativo: true
+    })
+    |> Repo.insert()
+
+    %ContasCarteiras{}
+    |> ContasCarteiras.changeset(%{
+      conta_id: conta3.id,
+      carteira_id: meal_wallet.id,
+      saldo: Decimal.new("3000.00"),
+      ativo: true
+    })
+    |> Repo.insert()
+
+    %ContasCarteiras{}
+    |> ContasCarteiras.changeset(%{
+      conta_id: conta3.id,
+      carteira_id: cash_wallet.id,
+      saldo: Decimal.new("3000.00"),
+      ativo: true
+    })
+    |> Repo.insert()
+
+    # Resto do código permanece o mesmo
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "5411",
+      nome_estabelecimento: "Supermercado A",
+      permite_food: true,
+      permite_meal: false,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "5412",
+      nome_estabelecimento: "Supermercado B",
+      permite_food: true,
+      permite_meal: false,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "5811",
+      nome_estabelecimento: "Restaurante A",
+      permite_food: false,
+      permite_meal: true,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "5812",
+      nome_estabelecimento: "Restaurante B",
+      permite_food: false,
+      permite_meal: true,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "5999",
+      nome_estabelecimento: "Loja de Conveniência",
+      permite_food: false,
+      permite_meal: false,
+      permite_cash: true
+    })
+    |> Repo.insert()
+
+    # Inserir estabelecimentos
+    %Estabelecimentos{}
+    |> Estabelecimentos.changeset(%{
+      uuid: "fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea",
+      nome_estabelecimento: "Estabelecimento Exemplo",
+      senha_hash:
+        "$pbkdf2-sha512$160000$/CrIInlvYGHTbkQQ2H8jaQ$0GhMgH2tWaypbZfGGy5AKUviZTBeo9Yd4VHZQyKtWhmuFZG/4CMxowQMMJGFh5lLIThBzr7qOIX2aPS.bQ120w"
+    })
+    |> Repo.insert()
+  end
+end
+
+# Executar a inserção de dados de teste
+if Mix.env() == :test do
+  SeedData.insert_test_data()
+end
