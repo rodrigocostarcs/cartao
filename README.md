@@ -54,6 +54,33 @@ web-1      | [watch] build finished, watching for changes...
 
 3. Acesse a API através de: http://localhost:4000
 
+### Migrações e Seeds do Banco de Dados
+
+Quando você executa o projeto com Docker Compose, as migrações e seeds são executados automaticamente durante a inicialização do container, através do script `docker-entrypoint.sh`. Isso significa que:
+
+1. O banco de dados é criado automaticamente
+2. As migrações são aplicadas automaticamente
+3. Os dados iniciais (seeds) são carregados automaticamente
+
+Se você precisar executar as migrações manualmente por algum motivo:
+
+```bash
+# Criar o banco de dados
+docker-compose exec web mix ecto.create
+
+# Executar migrações
+docker-compose exec web mix ecto.migrate
+
+# Carregar dados de teste (seeds)
+docker-compose exec web mix run priv/repo/seeds.exs
+```
+
+Se precisar reiniciar o banco de dados do zero:
+
+```bash
+docker-compose exec web mix ecto.reset
+```
+
 ### Acessando o Banco de Dados
 
 Para acessar o banco de dados MySQL diretamente:
@@ -64,14 +91,6 @@ docker-compose exec db mysql -u caju -pcaju_password caju_dev
 
 # Ou se preferir conectar via host
 mysql -h 127.0.0.1 -P 3306 -u caju -pcaju_password caju_dev
-```
-
-### Geração de Seeds
-
-Os dados de teste são automaticamente carregados quando o container é inicializado. Caso queira recarregar os dados:
-
-```bash
-docker-compose exec web mix run priv/repo/seeds.exs
 ```
 
 ## Documentação da API
@@ -166,17 +185,35 @@ A coleção Postman inclui os seguintes cenários:
 
 ## Executando Testes Unitários
 
-Para executar a suíte de testes do projeto:
+Para executar a suíte de testes do projeto, você precisa usar o ambiente de teste:
 
 ```bash
-docker-compose exec web mix test
+# Executar todos os testes
+docker-compose exec -e MIX_ENV=test web mix test
+
+# Executar um arquivo de teste específico
+docker-compose exec -e MIX_ENV=test web mix test test/caju/services/contas_carteiras_service_test.exs
 ```
+
+> **Observação**: É importante usar a flag `-e MIX_ENV=test` para garantir que os testes usem o ambiente correto com a configuração do Ecto.Adapters.SQL.Sandbox.
 
 Para ver a cobertura de testes:
 
 ```bash
-docker-compose exec web mix coveralls
+docker-compose exec -e MIX_ENV=test web mix coveralls
 ```
+
+### Cobertura de Testes
+
+A cobertura de testes pode ser visualizada em formato HTML executando o comando:
+
+```bash
+docker-compose exec -e MIX_ENV=test web mix coveralls.html
+```
+
+Isso gerará um relatório HTML na pasta `cover/` que pode ser aberto em um navegador para visualizar detalhadamente a cobertura de testes.
+
+![Exemplo de cobertura de testes](coverage_example.png)
 
 ## Desenvolvimento
 
@@ -213,18 +250,6 @@ docker-compose restart web
 - Guardian (Autenticação JWT)
 - Phoenix Swagger
 - ExCoveralls (Cobertura de testes)
-
-## Cobertura de Testes
-
-A cobertura de testes pode ser visualizada executando o comando:
-
-```bash
-docker-compose exec web mix coveralls.html
-```
-
-Isso gerará um relatório HTML na pasta `cover/` que pode ser aberto em um navegador para visualizar detalhadamente a cobertura de testes.
-
-![Exemplo de cobertura de testes](cobertura_testes.png)
 
 ## Resposta Desafio Técnico
 

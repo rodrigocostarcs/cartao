@@ -17,7 +17,7 @@ defmodule Caju.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test
       ],
-      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_swagger]
+      compilers: Mix.compilers() ++ [:phoenix_swagger]
     ]
   end
 
