@@ -124,6 +124,71 @@ Este diagrama foi gerado utilizando [mermaid.live](https://mermaid.live).
 7. **estabelecimentos**: Dados de autenticação e identificação dos estabelecimentos comerciais
    - Relacionamento `0:N` com **transacoes**: Um estabelecimento pode processar múltiplas transações
 
+## Fluxo do Sistema
+
+O diagrama abaixo ilustra o fluxo de processamento das transações no sistema Caju:
+
+```mermaid
+graph TD
+    %% Atores
+    Estabelecimento[Estabelecimento Comercial]
+    
+    %% Casos de Uso
+    CU1[Autenticar e Obter Token]
+    CU2[Processar Transação]
+    
+    %% Processos internos da API
+    P1[Validar MCC]
+    P2[Verificar Saldo]
+    P3[Efetivar Débito]
+    P4[Registrar no Extrato]
+    
+    %% Resultados
+    R1[Código 00: Aprovada]
+    R2[Código 51: Saldo Insuficiente]
+    R3[Código 07: Erro Geral]
+    
+    %% Relacionamentos
+    Estabelecimento --> CU1
+    Estabelecimento --> CU2
+    CU2 --> P1
+    P1 --> P2
+    P2 --> P3
+    P2 --> R2
+    P3 --> P4
+    P3 --> R1
+    CU2 --> R3
+    
+    %% Estilo
+    classDef ator fill:#FFA07A,stroke:#A52A2A,stroke-width:2px
+    classDef caso fill:#87CEFA,stroke:#4682B4,stroke-width:1px
+    classDef processo fill:#98FB98,stroke:#2E8B57,stroke-width:1px
+    classDef resultado fill:#FFD700,stroke:#DAA520,stroke-width:1px
+    
+    class Estabelecimento ator
+    class CU1,CU2 caso
+    class P1,P2,P3,P4 processo
+    class R1,R2,R3 resultado
+```
+
+### Explicação do Fluxo de Transações:
+
+1. **Autenticação do Estabelecimento**: O estabelecimento comercial inicia o processo realizando autenticação no sistema para obter um token JWT, que é necessário para as demais operações.
+
+2. **Processamento de Transação**: O estabelecimento solicita o processamento de uma transação, enviando dados como número da conta, valor, MCC e identificação do estabelecimento.
+
+3. **Validação e Processamento**:
+   - **Validação de MCC**: O sistema verifica o código MCC para determinar qual tipo de carteira (alimentação, refeição ou dinheiro) deve ser utilizada.
+   - **Verificação de Saldo**: O sistema verifica se há saldo suficiente na carteira selecionada.
+   - **Efetivação do Débito**: Se houver saldo, o sistema realiza o débito e registra a transação no extrato.
+
+4. **Resultados Possíveis**:
+   - **Código 00**: Transação aprovada com sucesso.
+   - **Código 51**: Transação recusada por saldo insuficiente.
+   - **Código 07**: Erro geral (conta inexistente, erro no processamento, etc.).
+
+Todas as respostas do sistema são retornadas com status HTTP 200, independentemente do código de resultado. Isso permite que o estabelecimento processe de forma padronizada as respostas da API.
+
 ## Instalação e Execução
 
 ### Clonando o Repositório
@@ -369,7 +434,7 @@ docker-compose restart web
 - Phoenix Swagger
 - ExCoveralls (Cobertura de testes)
 
-## Mecanismo de Processamento de Transações
+## Resposta Desafio Técnico
 
 ### L4. Questão aberta
 
