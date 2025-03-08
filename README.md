@@ -137,13 +137,19 @@ cd caju
 
 O projeto utiliza Docker e Docker Compose para facilitar a configuração do ambiente de desenvolvimento.
 
-1. Iniciar os contêineres:
+1. Construir os contêineres (necessário na primeira execução ou quando houver alterações no Dockerfile):
+
+```bash
+docker-compose build
+```
+
+2. Iniciar os contêineres:
 
 ```bash
 docker-compose up -d
 ```
 
-2. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
+3. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
 
 ```
 web-1      | [info] Running CajuWeb.Endpoint with cowboy 2.12.0 at 0.0.0.0:4000 (http)
@@ -151,7 +157,20 @@ web-1      | [info] Access CajuWeb.Endpoint at http://localhost:4000
 web-1      | [watch] build finished, watching for changes...
 ```
 
-3. Acesse a API através de: http://localhost:4000
+4. Acesse a API através de: http://localhost:4000
+
+5. Para parar os contêineres quando não estiver mais utilizando:
+
+```bash
+# Para parar os contêineres mantendo os dados
+docker-compose stop
+
+# Para parar e remover os contêineres (os dados serão perdidos)
+docker-compose down
+
+# Para parar, remover os contêineres e também remover volumes (reset completo)
+docker-compose down -v
+```
 
 ### Migrações e Seeds do Banco de Dados
 
