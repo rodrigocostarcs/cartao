@@ -7,7 +7,7 @@ alias Caju.Estabelecimentos
 
 # Função para inserir dados de teste
 defmodule SeedData do
-  def insert_test_data do
+  def insert_seed_data do
     # Limpar todas as tabelas antes de inserir
     Repo.delete_all(ContasCarteiras)
     Repo.delete_all(Contas)
@@ -19,7 +19,7 @@ defmodule SeedData do
     {:ok, conta1} =
       %Contas{}
       |> Contas.changeset(%{
-        numero_conta: "123456-#{:os.system_time()}",
+        numero_conta: "123456",
         nome_titular: "João Silva"
       })
       |> Repo.insert()
@@ -27,7 +27,7 @@ defmodule SeedData do
     {:ok, conta2} =
       %Contas{}
       |> Contas.changeset(%{
-        numero_conta: "654321-#{:os.system_time()}",
+        numero_conta: "654321",
         nome_titular: "Maria Oliveira"
       })
       |> Repo.insert()
@@ -35,7 +35,7 @@ defmodule SeedData do
     {:ok, conta3} =
       %Contas{}
       |> Contas.changeset(%{
-        numero_conta: "789012-#{:os.system_time()}",
+        numero_conta: "789012",
         nome_titular: "Rodrigo Costa"
       })
       |> Repo.insert()
@@ -157,6 +157,15 @@ defmodule SeedData do
 end
 
 # Executar a inserção de dados de teste
-if Mix.env() == :test do
-  SeedData.insert_test_data()
+case Mix.env() do
+  :test ->
+    SeedData.insert_seed_data()
+    IO.puts("Seeds de teste inseridos com sucesso!")
+
+  :dev ->
+    SeedData.insert_seed_data()
+    IO.puts("Seeds de desenvolvimento inseridos com sucesso!")
+
+  _ ->
+    IO.puts("Não é possível rodar seeds para: #{Mix.env()}")
 end
