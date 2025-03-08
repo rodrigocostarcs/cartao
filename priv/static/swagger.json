@@ -1,0 +1,176 @@
+{
+  "definitions": {
+    "AuthResponse": {
+      "description": "Resposta contendo o token JWT",
+      "example": {
+        "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9..."
+      },
+      "properties": {
+        "token": {
+          "description": "Token JWT para autenticação",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ],
+      "title": "Resposta de Autenticação",
+      "type": "object"
+    },
+    "TransacaoParams": {
+      "description": "Parâmetros necessários para efetuar uma transação",
+      "example": {
+        "conta": "123456",
+        "estabelecimento": "Supermercado A",
+        "mcc": "5411",
+        "valor": 100.0
+      },
+      "properties": {
+        "conta": {
+          "description": "Número da conta",
+          "type": "string"
+        },
+        "estabelecimento": {
+          "description": "Nome do estabelecimento",
+          "type": "string"
+        },
+        "mcc": {
+          "description": "Código MCC do estabelecimento",
+          "type": "string"
+        },
+        "valor": {
+          "description": "Valor da transação",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "required": [
+        "estabelecimento",
+        "mcc",
+        "valor",
+        "conta"
+      ],
+      "title": "Parâmetros da Transação",
+      "type": "object"
+    },
+    "TransacaoResponse": {
+      "description": "Resposta da transação com o código de retorno",
+      "example": {
+        "code": "00"
+      },
+      "properties": {
+        "code": {
+          "description": "Código de resposta (00=Aprovada, 51=Saldo insuficiente, 07=Erro)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "Resposta da Transação",
+      "type": "object"
+    }
+  },
+  "host": "localhost:4000",
+  "info": {
+    "contact": {
+      "email": "xxx@xxx.com.br",
+      "name": "xxxx xxx"
+    },
+    "description": "API para processamento de transações financeiras com diferentes tipos de carteiras.",
+    "termsOfService": "https://www.escrevendocodigos.com/termos",
+    "title": "API Caju",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/efetivar/transacao": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Processa uma transação financeira usando o número da conta, valor, código MCC e nome do estabelecimento.\n\nExemplos de requisições:\n\n1. Aprovação com carteira de alimentação:\n   { \"conta\": \"123456\", \"valor\": 100.00, \"mcc\": \"5411\", \"estabelecimento\": \"Supermercado A\" }\n\n2. Aprovação com carteira de refeição:\n   { \"conta\": \"789012\", \"valor\": 100.00, \"mcc\": \"5811\", \"estabelecimento\": \"Restaurante A\" }\n\n3. Aprovação com carteira cash (MCC não mapeado):\n   { \"conta\": \"789012\", \"valor\": 100.00, \"mcc\": \"58191\", \"estabelecimento\": \"Loja jp\" }\n\n4. Rejeição por saldo insuficiente:\n   { \"conta\": \"789012\", \"valor\": 2900.00, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n\n5. Sem saldo na carteira Meal, usando Cash:\n   { \"conta\": \"789012\", \"valor\": 2800.01, \"mcc\": \"5811\", \"estabelecimento\": \"Supermercado B\" }\n\n6. Mapear por estabelecimento:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n\n7. Erro quando conta inexistente:\n   { \"conta\": \"78901200\", \"valor\": 2900, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n",
+        "operationId": "CajuWeb.TransacaoController.efetivar_transacao",
+        "parameters": [
+          {
+            "description": "Parâmetros da transação",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransacaoParams"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Transação processada",
+            "schema": {
+              "$ref": "#/definitions/TransacaoResponse"
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Efetua uma transação financeira",
+        "tags": [
+          "Transacao"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Autentica um estabelecimento usando UUID e senha. Retorna um token JWT com tempo de expiração de 1 minuto.\n\nExemplo de requisição:\nGET /auth/login?uuid=fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea&senha=senha_secreta\n",
+        "operationId": "CajuWeb.AuthController.login",
+        "parameters": [
+          {
+            "description": "UUID do estabelecimento",
+            "in": "query",
+            "name": "uuid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Senha do estabelecimento",
+            "in": "query",
+            "name": "senha",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        },
+        "summary": "Autenticação de estabelecimento",
+        "tags": [
+          "Auth"
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "Token JWT no formato: Bearer {token}",
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0"
+}

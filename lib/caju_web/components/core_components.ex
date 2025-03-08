@@ -12,7 +12,7 @@ defmodule CajuWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import CajuWeb.Gettext
+  use Gettext, backend: CajuWeb.Gettext
 
   @doc """
   Renders a modal.

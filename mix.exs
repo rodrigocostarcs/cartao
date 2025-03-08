@@ -16,7 +16,8 @@ defmodule Caju.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ]
+      ],
+      compilers: Mix.compilers() ++ [:phoenix_swagger]
     ]
   end
 
@@ -61,7 +62,9 @@ defmodule Caju.MixProject do
       {:comeonin, "~> 5.3"},
       {:pbkdf2_elixir, "~> 1.3"},
       {:guardian, "~> 2.3"},
-      {:excoveralls, "~> 0.15", only: :test}
+      {:excoveralls, "~> 0.15", only: :test},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.7"}
     ]
   end
 

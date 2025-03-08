@@ -5,7 +5,7 @@ defmodule CajuWeb.Gettext do
   By using [Gettext](https://hexdocs.pm/gettext),
   your module gains a set of macros for translations, for example:
 
-      import CajuWeb.Gettext
+      use Gettext, backend: CajuWeb.Gettext
 
       # Simple translation
       gettext("Here is the string to translate")
@@ -20,5 +20,5 @@ defmodule CajuWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :caju
+  use Gettext.Backend, otp_app: :caju
 end

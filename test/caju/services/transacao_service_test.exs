@@ -1,7 +1,7 @@
 defmodule Caju.Services.TransacaoServiceTest do
   use Caju.DataCase
   alias Caju.Services.TransacaoService
-  alias Caju.{Contas, Carteiras, ContasCarteiras, Mccs, Repo}
+  alias Caju.{Repo}
 
   setup do
     # Limpar registros existentes de MCC antes de inserir novos
