@@ -6,9 +6,9 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :caju, Caju.Repo,
-  username: "root",
-  password: "Caju@1234",
-  hostname: "localhost",
+  username: System.get_env("DB_USER", "caju"),
+  password: System.get_env("DB_PASSWORD", "caju_password"),
+  hostname: System.get_env("TEST_DB_HOST", "test_db"),
   database: "caju_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10

@@ -149,8 +149,7 @@ defmodule SeedData do
     |> Estabelecimentos.changeset(%{
       uuid: "fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea",
       nome_estabelecimento: "Estabelecimento Exemplo",
-      senha_hash:
-        "$pbkdf2-sha512$160000$/CrIInlvYGHTbkQQ2H8jaQ$0GhMgH2tWaypbZfGGy5AKUviZTBeo9Yd4VHZQyKtWhmuFZG/4CMxowQMMJGFh5lLIThBzr7qOIX2aPS.bQ120w"
+      senha: "senha_secreta"
     })
     |> Repo.insert()
   end
