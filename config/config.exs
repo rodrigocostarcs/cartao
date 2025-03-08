@@ -7,6 +7,16 @@
 # General application configuration
 import Config
 
+config :phoenix_swagger, json_library: Jason
+
+config :caju, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: CajuWeb.Router,
+      endpoint: CajuWeb.Endpoint
+    ]
+  }
+
 config :caju, Caju.Guardian,
   issuer: "caju",
   secret_key: "MvbohvG2p82GA29dgXJQG0btDX8ccsHKwy3RZKfd/vvxMdgyK0sVxRvTY2RHLKZV"

@@ -18,6 +18,12 @@ defmodule CajuWeb.Router do
     plug Caju.Guardian.AuthPipeline
   end
 
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI,
+      otp_app: :caju,
+      swagger_file: "swagger.json"
+  end
+
   scope "/api", CajuWeb do
     pipe_through [:api, :auth]
 
@@ -55,5 +61,29 @@ defmodule CajuWeb.Router do
       live_dashboard "/dashboard", metrics: CajuWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "API Caju",
+        description:
+          "API para processamento de transações financeiras com diferentes tipos de carteiras.",
+        termsOfService: "https://www.escrevendocodigos.com/termos",
+        contact: %{
+          name: "xxxx xxx",
+          email: "xxx@xxx.com.br"
+        }
+      },
+      securityDefinitions: %{
+        Bearer: %{
+          type: "apiKey",
+          name: "Authorization",
+          in: "header",
+          description: "Token JWT no formato: Bearer {token}"
+        }
+      }
+    }
   end
 end
