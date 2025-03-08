@@ -1,260 +1,232 @@
-# Caju - Modelo Relacional Banco de Ddados
+# Caju - Sistema de Processamento de Transações
+
 ![Diagrama da Aplicação](diagrama.jpg)
 
-## Descrição das Tabelas do Banco de Dados
+## Visão Geral
 
-### 1. Tabela `contas`
-**Chave Primária (PK):** `id`
+Caju é uma API REST desenvolvida em Elixir com Phoenix Framework para processar transações financeiras em diferentes tipos de carteiras (alimentação, refeição e dinheiro). O sistema implementa um modelo de processamento de transações com validação de MCC (Merchant Category Code) para direcionar pagamentos para os tipos apropriados de carteira.
 
-**Campos:**
-- `numero_conta`
-- `nome_titular`
-- `criado_em`
+## Requisitos
 
-Essa tabela armazena as contas dos usuários.
+- Docker e Docker Compose
+- Git
+- Preferencialmente WSL2 para usuários Windows
 
----
+## Estrutura do Banco de Dados
 
-### 2. Tabela `transacoes_food`
-**Chave Primária (PK):** `id`
+![Diagrama da Aplicação](diagrama.jpg)
 
-**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
+### Principais Tabelas:
 
-**Campos:**
-- `tipo`
-- `valor`
-- `status`
-- `criado_em`
+- **contas**: Armazena os dados das contas de usuários
+- **carteiras**: Define tipos de carteira (food, meal, cash)
+- **contas_carteiras**: Associa contas a carteiras com seus respectivos saldos
+- **mccs**: Códigos MCC para classificação de estabelecimentos
+- **transacoes**: Registro centralizado de todas as transações
+- **estabelecimentos**: Dados dos estabelecimentos para autenticação
 
-Registra as transações relacionadas a alimentação.
+## Instalação e Execução
 
----
+### Clonando o Repositório
 
-### 3. Tabela `transacoes_meal`
-**Chave Primária (PK):** `id`
-
-**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
-
-**Campos:**
-- `tipo`
-- `valor`
-- `status`
-- `criado_em`
-
-Registra transações de refeição.
-
----
-
-### 4. Tabela `transacoes_cash`
-**Chave Primária (PK):** `id`
-
-**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
-
-**Campos:**
-- `tipo`
-- `valor`
-- `status`
-- `criado_em`
-
-Registra transações em dinheiro.
-
----
-
-### 5. Tabela `carteiras`
-**Chave Primária (PK):** `id_carteira`
-
-**Campos:**
-- `tipo_beneficio`
-- `descricao`
-- `criado_em`
-
-Representa os diferentes tipos de carteiras, como alimentação, refeição, etc.
-
----
-
-### 6. Tabela `contas_carteiras`
-**Chave Primária (PK):** `id`
-
-**Chave Estrangeira (FK):** `conta_id` → referencia `contas(id)`
-
-**Chave Estrangeira (FK):** `carteira_id` → referencia `carteiras(id_carteira)`
-
-**Campos:**
-- `saldo`
-- `saldo_reservado`
-- `atualizado_em`
-- `ativo`
-- `criado_em`
-
-Liga as contas dos usuários às suas carteiras, armazenando saldos e status.
-
----
-
-### 7. Tabela `Extratos`
-**Chave Primária (PK):** `id`
-
-**Chave Estrangeira (FK):** `id_conta` → referencia `contas(id)`
-
-**Chave Estrangeira (FK):** `id_carteira` → referencia `carteiras(id_carteira)`
-
-**Campos:**
-- `debito`
-- `credito`
-- `data_transacao`
-- `descricao`
-
-Armazena o histórico de movimentações.
-
----
-
-### 8. Tabela `mccs`
-**Chave Primária (PK):** `id`
-
-**Campos:**
-- `codigo_mcc`
-- `nome_estabelecimento`
-
-Representa os códigos e nomes dos estabelecimentos comerciais.
-
----
-
-### 9. Tabela `carteiras_mccs`
-**Chave Primária (PK):** `id`
-
-**Chave Estrangeira (FK):** `carteira_id` → referencia `carteiras(id_carteira)`
-
-**Chave Estrangeira (FK):** `mcc_id` → referencia `mccs(id)`
-
-**Campos:**
-- `criado_em`
-
-Relaciona as carteiras aos estabelecimentos (MCCs).
-
----
-
-### 10. Tabela `estabelecimentos`
-**Chave Primária (PK):** `uuid`
-
-**Campos:**
-- `nome_estabelecimento`
-- `senha_hash`
-- `criado_em`
-
-Armazena dados dos estabelecimentos cadastrados.
-
----
-
-## Resumo das Relações
-- `contas` se relaciona com `transacoes_food`, `transacoes_meal`, `transacoes_cash` e `Extratos`.
-- `contas_carteiras` liga `contas` e `carteiras`.
-- `Extratos` também se relaciona com `carteiras`.
-- `carteiras_mccs` relaciona `carteiras` com `mccs`.
-- `estabelecimentos` armazena informações dos estabelecimentos.
-
-
-# Caju - Guia de Configuração e Execução
-
-## Configuração do Ambiente MySQL no Ubuntu
-
-### Atualize os pacotes:
 ```bash
-sudo apt update
-```
-
-### Instale o MySQL Server:
-```bash
-sudo apt install mysql-server
-```
-
-### Inicie e habilite o MySQL:
-```bash
-sudo systemctl start mysql
-sudo systemctl enable mysql
-```
-
-### Acesse o MySQL:
-```bash
-mysql -u root -p
-```
-
-### Execute os comandos dos arquivos `comandos.sql` e `inserts.sql` para configurar o banco de dados.
-
----
-
-## Instalação do Elixir e Erlang no Ubuntu
-
-### Atualize os pacotes:
-```bash
-sudo apt update
-```
-
-### Instale Erlang e Elixir:
-```bash
-sudo apt install erlang elixir
-```
-
-### Verifique a versão:
-```bash
-elixir --version
-```
-
-### Instale as ferramentas do Phoenix Framework:
-```bash
-mix archive.install hex phx_new 1.7.0
-```
-
----
-
-## Configuração do Projeto
-
-### Clone o repositório e acesse a pasta do projeto:
-```bash
+git clone https://github.com/seu-usuario/caju.git
 cd caju
 ```
 
-### Instale as dependências:
+### Configuração do Ambiente com Docker
+
+O projeto utiliza Docker e Docker Compose para facilitar a configuração do ambiente de desenvolvimento.
+
+1. Iniciar os contêineres:
+
 ```bash
-mix deps.get
+docker-compose up -d
 ```
 
-### Configure o arquivo `config/dev.exs` com as credenciais do banco de dados:
-```elixir
-username: "root",
-password: "senha",
-hostname: "localhost",
-database: "caju_dev",
-stacktrace: true,
-show_sensitive_data_on_connection_error: true,
-pool_size: 10
+2. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
+
+```
+web-1      | [info] Running CajuWeb.Endpoint with cowboy 2.12.0 at 0.0.0.0:4000 (http)
+web-1      | [info] Access CajuWeb.Endpoint at http://localhost:4000
+web-1      | [watch] build finished, watching for changes...
 ```
 
----
+3. Acesse a API através de: http://localhost:4000
 
-## Execução do Projeto
+### Acessando o Banco de Dados
 
-### Execute o servidor Phoenix:
+Para acessar o banco de dados MySQL diretamente:
+
 ```bash
-mix phx.server
+# Conecte ao container do MySQL
+docker-compose exec db mysql -u caju -pcaju_password caju_dev
+
+# Ou se preferir conectar via host
+mysql -h 127.0.0.1 -P 3306 -u caju -pcaju_password caju_dev
 ```
 
-A API estará disponível em: [http://127.0.0.1:4000](http://127.0.0.1:4000)
+### Geração de Seeds
 
----
+Os dados de teste são automaticamente carregados quando o container é inicializado. Caso queira recarregar os dados:
 
-## Testando a API com Postman
+```bash
+docker-compose exec web mix run priv/repo/seeds.exs
+```
 
-- Utilize o Postman para testar as requisições REST.
-- O arquivo `caju.postman_collection.json`, localizado na raiz do projeto, contém todas as requisições configuradas.
+## Documentação da API
 
-### Fluxo de Teste:
-1. Realizar login com os dados do estabelecimento (já inseridos no banco de dados pelos scripts).
-2. A autenticação gera um token JWT.
-3. O token JWT deve ser utilizado nas demais requisições.
-4. O tempo de expiração do token está definido como 1 minuto para fins de teste.
-5. Cada requisição no arquivo Postman contém uma situação de teste específica, conforme o proposto.
+### Swagger
 
-### Dica:
-Sempre verifique se o banco de dados está ativo antes de iniciar o servidor Phoenix.
+A API está documentada com Swagger. Para acessar a documentação interativa:
+
+1. Certifique-se que o servidor está rodando
+2. Acesse: http://localhost:4000/api/swagger
+
+### Rotas Principais
+
+#### Autenticação
+
+```
+POST /auth/login?uuid=fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea&senha=senha_secreta
+```
+
+Resposta de sucesso:
+```json
+{
+  "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6..."
+}
+```
+
+#### Processamento de Transação
+
+```
+POST /api/efetivar/transacao
+```
+
+Cabeçalho:
+```
+Authorization: Bearer {token}
+```
+
+Corpo da requisição:
+```json
+{
+  "conta": "123456",
+  "valor": 100.00,
+  "mcc": "5411",
+  "estabelecimento": "Supermercado A"
+}
+```
+
+Resposta de sucesso:
+```json
+{
+  "code": "00"
+}
+```
+
+Códigos de retorno:
+- `00`: Transação aprovada
+- `51`: Saldo insuficiente
+- `07`: Erro geral (conta inexistente, etc.)
+
+## Testando a API
+
+### Usando o Swagger
+
+1. Acesse http://localhost:4000/api/swagger
+2. Autentique-se via rota `/auth/login`
+3. Copie o token retornado
+4. Utilize o token para autorizar as requisições na UI do Swagger
+5. Teste a rota `/api/efetivar/transacao`
+
+### Usando o Postman
+
+Um arquivo Postman Collection está disponível na raiz do projeto (`caju.postman_collection.json`), contendo exemplos de todas as requisições.
+
+1. Importe a coleção no Postman
+2. Execute a requisição "Login" para obter o token
+3. O token tem validade de 1 minuto (para fins de teste)
+4. Use o token para autenticar as demais requisições
+
+## Cenários de Teste Implementados
+
+A coleção Postman inclui os seguintes cenários:
+
+1. Transação com carteira Meal em estabelecimento de refeição (MCC 5811)
+2. Transação com carteira Meal em estabelecimento de refeição alternativo (MCC 5812)
+3. Transação com carteira Food em supermercado (MCC 5411)
+4. Transação com carteira Food em supermercado alternativo (MCC 5412)
+5. Transação usando Cash quando saldo de Meal não é suficiente
+6. Transação com MCC não mapeado (usa carteira Cash)
+7. Localização de estabelecimento por nome
+8. Tentativa de transação com saldo insuficiente
+9. Erro com conta inexistente
+
+## Executando Testes Unitários
+
+Para executar a suíte de testes do projeto:
+
+```bash
+docker-compose exec web mix test
+```
+
+Para ver a cobertura de testes:
+
+```bash
+docker-compose exec web mix coveralls
+```
+
+## Desenvolvimento
+
+### Estrutura do Projeto
+
+- `lib/caju/models`: Esquemas Ecto para as tabelas
+- `lib/caju/repositories`: Acesso ao banco de dados
+- `lib/caju/services`: Regras de negócio
+- `lib/caju_web/controllers`: Controladores da API
+- `test/`: Testes unitários e de integração
+
+### Comandos Úteis
+
+```bash
+# Gerar documentação Swagger
+docker-compose exec web mix phx.swagger.generate
+
+# Acessar o shell interativo do Elixir
+docker-compose exec web iex -S mix
+
+# Verificar logs da aplicação
+docker-compose logs -f web
+
+# Reiniciar a aplicação
+docker-compose restart web
+```
+
+## Tecnologias Utilizadas
+
+- Elixir 1.14
+- Phoenix Framework 1.7
+- MySQL 5.7
+- Docker & Docker Compose
+- Guardian (Autenticação JWT)
+- Phoenix Swagger
+- ExCoveralls (Cobertura de testes)
+
+## Cobertura de Testes
+
+A cobertura de testes pode ser visualizada executando o comando:
+
+```bash
+docker-compose exec web mix coveralls.html
+```
+
+Isso gerará um relatório HTML na pasta `cover/` que pode ser aberto em um navegador para visualizar detalhadamente a cobertura de testes.
+
+![Exemplo de cobertura de testes](cobertura_testes.png)
+
+## Resposta Desafio Técnico
 
 ### L4. Questão aberta
 
