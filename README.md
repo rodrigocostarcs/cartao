@@ -1,7 +1,5 @@
 # Caju - Sistema de Processamento de Transações
 
-![Diagrama da Aplicação](diagrama.jpg)
-
 ## Visão Geral
 
 Caju é uma API REST desenvolvida em Elixir com Phoenix Framework para processar transações financeiras em diferentes tipos de carteiras (alimentação, refeição e dinheiro). O sistema implementa um modelo de processamento de transações com validação de MCC (Merchant Category Code) para direcionar pagamentos para os tipos apropriados de carteira.
@@ -14,16 +12,117 @@ Caju é uma API REST desenvolvida em Elixir com Phoenix Framework para processar
 
 ## Estrutura do Banco de Dados
 
-![Diagrama da Aplicação](diagrama.jpg)
+O sistema Caju utiliza um modelo relacional com as seguintes tabelas e relacionamentos:
 
-### Principais Tabelas:
+```mermaid
+erDiagram
+    contas ||--o{ contas_carteiras : "1:N"
+    contas ||--o{ transacoes : "1:N"
+    contas ||--o{ extratos : "1:N"
+    carteiras ||--o{ contas_carteiras : "1:N"
+    carteiras ||--o{ transacoes : "1:N"
+    carteiras ||--o{ extratos : "1:N"
+    mccs ||--o{ transacoes : "0:N"
+    estabelecimentos ||--o{ transacoes : "0:N"
 
-- **contas**: Armazena os dados das contas de usuários
-- **carteiras**: Define tipos de carteira (food, meal, cash)
-- **contas_carteiras**: Associa contas a carteiras com seus respectivos saldos
-- **mccs**: Códigos MCC para classificação de estabelecimentos
-- **transacoes**: Registro centralizado de todas as transações
-- **estabelecimentos**: Dados dos estabelecimentos para autenticação
+    contas {
+        int id PK
+        string numero_conta
+        string nome_titular
+        datetime criado_em
+    }
+
+    carteiras {
+        int id PK
+        enum tipo_beneficio "food, meal, cash"
+        string descricao
+        datetime criado_em
+    }
+
+    contas_carteiras {
+        int id PK
+        int conta_id FK
+        int carteira_id FK
+        decimal saldo
+        decimal saldo_reservado
+        boolean ativo
+        datetime atualizado_em
+        datetime criado_em
+    }
+
+    mccs {
+        int id PK
+        string codigo_mcc
+        string nome_estabelecimento
+        boolean permite_food
+        boolean permite_meal
+        boolean permite_cash
+        datetime criado_em
+    }
+
+    extratos {
+        int id PK
+        decimal debito
+        decimal credito
+        int id_conta FK
+        int carteira_id FK
+        datetime data_transacao
+        string descricao
+    }
+
+    transacoes {
+        int id PK
+        int conta_id FK
+        int carteira_id FK
+        string tipo "debito, credito"
+        decimal valor
+        string status "pendente, confirmado, cancelado"
+        string estabelecimento
+        string mcc_codigo
+        datetime criado_em
+    }
+
+    estabelecimentos {
+        string uuid PK
+        string nome_estabelecimento
+        string senha_hash
+        datetime criado_em
+    }
+```
+
+Este diagrama foi gerado utilizando [mermaid.live](https://mermaid.live).
+
+### Descrição das Tabelas e Relacionamentos:
+
+1. **contas**: Armazena os dados dos usuários (beneficiários)
+   - Relacionamento `1:N` com **contas_carteiras**: Um usuário pode ter múltiplas carteiras
+   - Relacionamento `1:N` com **transacoes**: Um usuário pode realizar múltiplas transações
+   - Relacionamento `1:N` com **extratos**: Um usuário pode ter múltiplos registros de extrato
+
+2. **carteiras**: Define os tipos de benefício (alimentação, refeição, dinheiro)
+   - Relacionamento `1:N` com **contas_carteiras**: Cada tipo de carteira pode estar associado a múltiplos usuários
+   - Relacionamento `1:N` com **transacoes**: Cada tipo de carteira pode ter múltiplas transações
+   - Relacionamento `1:N` com **extratos**: Cada tipo de carteira pode ter múltiplos registros de extrato
+
+3. **contas_carteiras**: Associa usuários a carteiras, armazenando saldos
+   - Relacionamento `N:1` com **contas**: Cada associação pertence a um único usuário
+   - Relacionamento `N:1` com **carteiras**: Cada associação representa um tipo específico de carteira
+
+4. **mccs**: Códigos de categoria de estabelecimentos comerciais
+   - Relacionamento `0:N` com **transacoes**: Um MCC pode estar associado a múltiplas transações ou a nenhuma
+
+5. **transacoes**: Registro centralizado de todas as operações financeiras
+   - Relacionamento `N:1` com **contas**: Cada transação pertence a um único usuário
+   - Relacionamento `N:1` com **carteiras**: Cada transação é processada em um tipo específico de carteira
+   - Relacionamento `N:0` com **mccs**: Cada transação pode estar associada a um MCC específico
+   - Relacionamento `N:0` com **estabelecimentos**: Cada transação pode ser processada por um estabelecimento
+
+6. **extratos**: Histórico detalhado de movimentações financeiras
+   - Relacionamento `N:1` com **contas**: Cada registro de extrato pertence a um único usuário
+   - Relacionamento `N:1` com **carteiras**: Cada registro de extrato está associado a um tipo específico de carteira
+
+7. **estabelecimentos**: Dados de autenticação e identificação dos estabelecimentos comerciais
+   - Relacionamento `0:N` com **transacoes**: Um estabelecimento pode processar múltiplas transações
 
 ## Instalação e Execução
 
@@ -213,7 +312,7 @@ docker-compose exec -e MIX_ENV=test web mix coveralls.html
 
 Isso gerará um relatório HTML na pasta `cover/` que pode ser aberto em um navegador para visualizar detalhadamente a cobertura de testes.
 
-![Exemplo de cobertura de testes](coverage_example.png)
+![Exemplo de cobertura de testes](cobertura_testes.png)
 
 ## Desenvolvimento
 
@@ -251,7 +350,7 @@ docker-compose restart web
 - Phoenix Swagger
 - ExCoveralls (Cobertura de testes)
 
-## Resposta Desafio Técnico
+## Mecanismo de Processamento de Transações
 
 ### L4. Questão aberta
 
