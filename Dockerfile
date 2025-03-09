@@ -26,19 +26,25 @@ RUN elixir --version && erl -version
 # Criar diretório da aplicação
 WORKDIR /app
 
-# Copiar código da aplicação
-COPY . .
+# Copiar arquivos de dependências primeiro para aproveitar o cache
+COPY mix.exs mix.lock ./
+COPY config config
 
+# Instalar hex e rebar
 RUN mix local.hex --force && \
     mix local.rebar --force && \
     mix archive.install hex phx_new 1.7.0 --force
 
-# Instalar dependências do projeto
+# Baixar as dependências
 RUN mix deps.get
 
-RUN cd assets && npm ci || true && cd .. && \
-    mix assets.setup || true && \
-    mix assets.build || true
+# Copiar todo o código da aplicação
+COPY . .
+
+# Configurar e compilar os assets
+RUN cd assets && npm ci && cd .. && \
+    mix assets.setup && \
+    mix assets.build
 
 EXPOSE 4000
 
