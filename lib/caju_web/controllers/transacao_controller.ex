@@ -43,6 +43,18 @@ defmodule CajuWeb.TransacaoController do
 
     7. Erro quando conta inexistente:
        { "conta": "78901200", "valor": 2900, "mcc": "581911", "estabelecimento": "Restaurante A" }
+
+    8. Efetivar Transação - MCC iguais:
+       { "conta": "789012", "valor": 0.55, "mcc": "1", "estabelecimento": "padaria 1" }
+
+    9. Efetivar Transação - MCC iguais:
+       { "conta": "789012", "valor": 0.55, "mcc": "1", "estabelecimento": "padaria 1" }
+
+    10. Efetivar Transação - MCC iguais:
+       { "conta": "789012", "valor": 0.55, "mcc": "1", "estabelecimento": "padaria 2" }
+
+    11. Efetivar Transação - MCC iguais:
+       { "conta": "789012", "valor": 0.55, "mcc": "1", "estabelecimento": "padaria 3" }
     """)
 
     security([%{Bearer: []}])
