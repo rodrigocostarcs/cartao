@@ -17,6 +17,56 @@
       "title": "Resposta de Autenticação",
       "type": "object"
     },
+    "SaldoResponse": {
+      "description": "Detalhes do saldo da carteira solicitada",
+      "example": {
+        "conta_numero": "123456",
+        "saldo": 1.0e3,
+        "saldo_disponivel": 1.0e3,
+        "saldo_reservado": 0.0,
+        "tipo_carteira": "food",
+        "titular": "João Silva"
+      },
+      "properties": {
+        "conta_numero": {
+          "description": "Número da conta",
+          "type": "string"
+        },
+        "saldo": {
+          "description": "Saldo disponível",
+          "format": "float",
+          "type": "number"
+        },
+        "saldo_disponivel": {
+          "description": "Saldo total disponível (saldo - saldo_reservado)",
+          "format": "float",
+          "type": "number"
+        },
+        "saldo_reservado": {
+          "description": "Saldo reservado",
+          "format": "float",
+          "type": "number"
+        },
+        "tipo_carteira": {
+          "description": "Tipo da carteira (food, meal, cash)",
+          "type": "string"
+        },
+        "titular": {
+          "description": "Nome do titular da conta",
+          "type": "string"
+        }
+      },
+      "required": [
+        "saldo_disponivel",
+        "saldo_reservado",
+        "saldo",
+        "tipo_carteira",
+        "titular",
+        "conta_numero"
+      ],
+      "title": "Resposta de Consulta de Saldo",
+      "type": "object"
+    },
     "TransacaoParams": {
       "description": "Parâmetros necessários para efetuar uma transação",
       "example": {
@@ -83,6 +133,54 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/consultar/saldo": {
+      "get": {
+        "description": "Retorna o saldo atual da carteira especificada para a conta informada.\n\nExemplos de requisições:\n\n1. Consulta de saldo de carteira food:\n   GET /api/consultar/saldo?conta=123456&tipo_carteira=food\n\n2. Consulta de saldo de carteira meal:\n   GET /api/consultar/saldo?conta=789012&tipo_carteira=meal\n\n3. Consulta de saldo de carteira cash:\n   GET /api/consultar/saldo?conta=789012&tipo_carteira=cash\n",
+        "operationId": "CajuWeb.SaldoController.consultar_saldo",
+        "parameters": [
+          {
+            "description": "Número da conta",
+            "in": "query",
+            "name": "conta",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Tipo da carteira (food, meal, cash)",
+            "in": "query",
+            "name": "tipo_carteira",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saldo consultado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/SaldoResponse"
+            }
+          },
+          "400": {
+            "description": "Tipo de carteira inválido"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Conta ou carteira não encontrada"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Consulta o saldo de uma conta e carteira específica",
+        "tags": [
+          "Saldo"
+        ]
+      }
+    },
     "/api/efetivar/transacao": {
       "post": {
         "consumes": [

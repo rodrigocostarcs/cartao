@@ -1,4 +1,14 @@
 defmodule CajuWeb.TransacaoController do
+  @moduledoc """
+  Controller responsável pelo processamento de transações financeiras via API.
+
+  Este módulo gerencia as requisições HTTP relacionadas ao processamento de transações,
+  fornecendo endpoints para efetivar transações e lidando com a interação entre
+  o cliente da API e os serviços internos.
+
+  Também inclui a documentação Swagger dos endpoints para facilitar o uso da API.
+  """
+
   use CajuWeb, :controller
   use PhoenixSwagger
 
@@ -86,6 +96,27 @@ defmodule CajuWeb.TransacaoController do
     }
   end
 
+  @doc """
+  Processa uma transação financeira.
+
+  Endpoint principal para efetuar transações no sistema Caju.
+  Recebe os dados da transação, processa usando o TransacaoService,
+  e retorna o resultado com o código apropriado.
+
+  ## Parâmetros (via JSON)
+
+    * `conta` - Número da conta do usuário
+    * `valor` - Valor da transação
+    * `mcc` - Código MCC do estabelecimento
+    * `estabelecimento` - Nome do estabelecimento
+
+  ## Retorno
+
+  Resposta JSON com código de resultado:
+    * `{"code": "00"}` - Transação aprovada
+    * `{"code": "51"}` - Saldo insuficiente
+    * `{"code": "07"}` - Erro geral (conta não encontrada, etc.)
+  """
   def efetivar_transacao(conn, %{
         "conta" => conta,
         "valor" => valor,
@@ -109,6 +140,7 @@ defmodule CajuWeb.TransacaoController do
     end
   end
 
+  @doc false
   defp pegar_codigo_transacao(retorno_transacao) do
     case retorno_transacao do
       {:ok, {:ok, code}} -> code

@@ -124,6 +124,71 @@ Este diagrama foi gerado utilizando [mermaid.live](https://mermaid.live).
 7. **estabelecimentos**: Dados de autenticação e identificação dos estabelecimentos comerciais
    - Relacionamento `0:N` com **transacoes**: Um estabelecimento pode processar múltiplas transações
 
+## Fluxo do Sistema
+
+O diagrama abaixo ilustra o fluxo de processamento das transações no sistema Caju:
+
+```mermaid
+graph TD
+    %% Atores
+    Estabelecimento[Estabelecimento Comercial]
+    
+    %% Casos de Uso
+    CU1[Autenticar e Obter Token]
+    CU2[Processar Transação]
+    
+    %% Processos internos da API
+    P1[Validar MCC]
+    P2[Verificar Saldo]
+    P3[Efetivar Débito]
+    P4[Registrar no Extrato]
+    
+    %% Resultados
+    R1[Código 00: Aprovada]
+    R2[Código 51: Saldo Insuficiente]
+    R3[Código 07: Erro Geral]
+    
+    %% Relacionamentos
+    Estabelecimento --> CU1
+    Estabelecimento --> CU2
+    CU2 --> P1
+    P1 --> P2
+    P2 --> P3
+    P2 --> R2
+    P3 --> P4
+    P3 --> R1
+    CU2 --> R3
+    
+    %% Estilo
+    classDef ator fill:#FFA07A,stroke:#A52A2A,stroke-width:2px
+    classDef caso fill:#87CEFA,stroke:#4682B4,stroke-width:1px
+    classDef processo fill:#98FB98,stroke:#2E8B57,stroke-width:1px
+    classDef resultado fill:#FFD700,stroke:#DAA520,stroke-width:1px
+    
+    class Estabelecimento ator
+    class CU1,CU2 caso
+    class P1,P2,P3,P4 processo
+    class R1,R2,R3 resultado
+```
+
+### Explicação do Fluxo de Transações:
+
+1. **Autenticação do Estabelecimento**: O estabelecimento comercial inicia o processo realizando autenticação no sistema para obter um token JWT, que é necessário para as demais operações.
+
+2. **Processamento de Transação**: O estabelecimento solicita o processamento de uma transação, enviando dados como número da conta, valor, MCC e identificação do estabelecimento.
+
+3. **Validação e Processamento**:
+   - **Validação de MCC**: O sistema verifica o código MCC para determinar qual tipo de carteira (alimentação, refeição ou dinheiro) deve ser utilizada.
+   - **Verificação de Saldo**: O sistema verifica se há saldo suficiente na carteira selecionada.
+   - **Efetivação do Débito**: Se houver saldo, o sistema realiza o débito e registra a transação no extrato.
+
+4. **Resultados Possíveis**:
+   - **Código 00**: Transação aprovada com sucesso.
+   - **Código 51**: Transação recusada por saldo insuficiente.
+   - **Código 07**: Erro geral (conta inexistente, erro no processamento, etc.).
+
+Todas as respostas do sistema são retornadas com status HTTP 200, independentemente do código de resultado. Isso permite que o estabelecimento processe de forma padronizada as respostas da API.
+
 ## Instalação e Execução
 
 ### Clonando o Repositório
@@ -137,13 +202,19 @@ cd caju
 
 O projeto utiliza Docker e Docker Compose para facilitar a configuração do ambiente de desenvolvimento.
 
-1. Iniciar os contêineres:
+1. Construir os contêineres (necessário na primeira execução ou quando houver alterações no Dockerfile):
+
+```bash
+docker-compose build
+```
+
+2. Iniciar os contêineres:
 
 ```bash
 docker-compose up -d
 ```
 
-2. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
+3. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
 
 ```
 web-1      | [info] Running CajuWeb.Endpoint with cowboy 2.12.0 at 0.0.0.0:4000 (http)
@@ -151,7 +222,20 @@ web-1      | [info] Access CajuWeb.Endpoint at http://localhost:4000
 web-1      | [watch] build finished, watching for changes...
 ```
 
-3. Acesse a API através de: http://localhost:4000
+4. Acesse a API através de: http://localhost:4000
+
+5. Para parar os contêineres quando não estiver mais utilizando:
+
+```bash
+# Para parar os contêineres mantendo os dados
+docker-compose stop
+
+# Para parar e remover os contêineres (os dados serão perdidos)
+docker-compose down
+
+# Para parar, remover os contêineres e também remover volumes (reset completo)
+docker-compose down -v
+```
 
 ### Migrações e Seeds do Banco de Dados
 
@@ -249,6 +333,47 @@ Códigos de retorno:
 - `51`: Saldo insuficiente
 - `07`: Erro geral (conta inexistente, etc.)
 
+#### Consulta de Saldo
+
+```
+GET /api/consultar/saldo?conta=123456&tipo_carteira=food
+```
+
+Cabeçalho:
+```
+Authorization: Bearer {token}
+```
+
+Parâmetros da consulta:
+- `conta`: Número da conta do usuário
+- `tipo_carteira`: Tipo da carteira a consultar (food, meal ou cash)
+
+Resposta de sucesso:
+```json
+{
+  "conta_numero": "123456",
+  "titular": "João Silva",
+  "tipo_carteira": "food", 
+  "saldo": 1000.00,
+  "saldo_reservado": 0.00,
+  "saldo_disponivel": 1000.00
+}
+```
+
+Códigos de retorno HTTP:
+- `200`: Consulta realizada com sucesso
+- `400`: Tipo de carteira inválido
+- `404`: Conta ou carteira não encontrada
+- `401`: Não autorizado
+
+Esta rota foi adicionada para facilitar a visualização dos saldos das carteiras durante o processo de testes e desenvolvimento. Ela permite verificar:
+
+1. O saldo total da carteira
+2. O saldo reservado (valor bloqueado para transações em processamento)
+3. O saldo disponível (saldo total menos o saldo reservado)
+
+A consulta de saldo é útil para confirmar que o mecanismo de reserva de saldo está funcionando corretamente durante as transações e para verificar o estado atual das carteiras do usuário.
+
 ## Testando a API
 
 ### Usando o Swagger
@@ -340,6 +465,58 @@ docker-compose logs -f web
 docker-compose restart web
 ```
 
+### Documentação do Código
+
+O projeto Caju possui documentação completa do código usando ExDoc, que pode ser gerada e acessada facilmente.
+
+#### Gerando a Documentação
+
+Para gerar a documentação HTML do projeto:
+
+```bash
+# Certifique-se que a dependência ex_doc está instalada
+docker-compose exec web mix deps.get
+
+# Gere a documentação
+docker-compose exec web mix docs
+```
+
+Este comando criará um diretório `doc/` na raiz do projeto, contendo a documentação HTML completa.
+
+#### Acessando a Documentação
+
+Existem duas formas de acessar a documentação gerada:
+
+1. **Diretamente pelo sistema de arquivos**:
+   - Navegue até o diretório `doc/` no projeto
+   - Abra o arquivo `index.html` em um navegador web
+
+2. **Via servidor web local** (se você estiver usando uma ferramenta como VS Code):
+   - Abra o arquivo `doc/index.html` com sua ferramenta
+   - Use a função "Open with Live Server" ou similar
+
+#### Conteúdo da Documentação
+
+A documentação inclui:
+
+- Visão geral de todos os módulos do sistema
+- Detalhes de cada função pública e seus parâmetros
+- Especificações de tipos (typespecs)
+- Exemplos de uso quando disponíveis
+- Organização hierárquica do código
+
+A documentação é um recurso valioso para novos desenvolvedores entenderem a estrutura e o funcionamento do sistema Caju, apresentando informações detalhadas sobre todos os componentes, desde modelos de dados até serviços e controllers.
+
+#### Atualizando a Documentação
+
+Sempre que fizer alterações significativas no código ou adicionar novos módulos, é recomendável atualizar a documentação:
+
+```bash
+docker-compose exec web mix docs
+```
+
+Isso garantirá que a documentação esteja sempre atualizada com as últimas mudanças no projeto.
+
 ## Tecnologias Utilizadas
 
 - Elixir 1.14
@@ -349,8 +526,9 @@ docker-compose restart web
 - Guardian (Autenticação JWT)
 - Phoenix Swagger
 - ExCoveralls (Cobertura de testes)
+- ExDoc (Documentação de código)
 
-## Mecanismo de Processamento de Transações
+## Resposta Desafio Técnico
 
 ### L4. Questão aberta
 

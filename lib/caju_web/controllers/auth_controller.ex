@@ -1,4 +1,14 @@
 defmodule CajuWeb.AuthController do
+  @moduledoc """
+  Controller responsável pela autenticação de estabelecimentos.
+
+  Este módulo gerencia as requisições HTTP relacionadas à autenticação,
+  permitindo que estabelecimentos comerciais obtenham tokens JWT
+  para acesso às demais funcionalidades da API.
+
+  Também inclui a documentação Swagger do endpoint para facilitar o uso da API.
+  """
+
   use CajuWeb, :controller
   use PhoenixSwagger
 
@@ -43,6 +53,34 @@ defmodule CajuWeb.AuthController do
     }
   end
 
+  @doc """
+  Autentica um estabelecimento e retorna um token JWT.
+
+  Este endpoint valida as credenciais do estabelecimento (UUID e senha)
+  e, se corretas, gera um token JWT com validade de 1 minuto para uso
+  nas demais operações da API.
+
+  ## Parâmetros (via query string)
+
+    * `uuid` - UUID do estabelecimento
+    * `senha` - Senha do estabelecimento
+
+  ## Retorno
+
+  Em caso de sucesso (status 200):
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9..."
+  }
+  ```
+
+  Em caso de erro (status 401):
+  ```json
+  {
+    "error": "Invalid credentials"
+  }
+  ```
+  """
   def login(conn, %{"uuid" => uuid, "senha" => senha}) do
     case EstabelecimentosService.autenticar(uuid, senha) do
       {:ok, estabelecimento} ->

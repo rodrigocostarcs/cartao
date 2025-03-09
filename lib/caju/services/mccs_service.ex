@@ -1,10 +1,48 @@
 defmodule Caju.Services.MccsService do
+  @moduledoc """
+  Serviço responsável por operações relacionadas aos códigos MCC (Merchant Category Code).
+
+  Este módulo implementa a lógica de negócio para buscar e validar códigos MCC,
+  que são essenciais para determinar quais tipos de carteira podem ser utilizados
+  em determinados estabelecimentos.
+
+  Os MCCs são usados para categorizar estabelecimentos comerciais e determinar
+  se uma transação pode ser processada com carteiras do tipo food, meal ou cash.
+  """
+
   alias Caju.Repositories.MccsRepository
 
   @doc """
   Busca MCC por código ou nome de estabelecimento.
-  O nome do estabelecimento tem precedência sobre o código MCC.
+
+  Esta função implementa uma lógica de precedência na busca:
+  1. Primeiro tenta encontrar MCCs pelo nome do estabelecimento
+  2. Se encontrar um ou mais MCCs pelo nome, retorna o primeiro ou principal
+  3. Se não encontrar pelo nome, tenta buscar pelo código MCC
+
+  ## Parâmetros
+
+    * `mcc` - Código MCC (ex: "5411")
+    * `estabelecimento` - Nome do estabelecimento
+
+  ## Retorno
+
+    * `{:ok, mcc_encontrado}` - MCC encontrado com sucesso
+    * `{:error, :mcc_nao_encontrado}` - Quando nenhum MCC é encontrado
+
+  ## Exemplos
+
+      iex> MccsService.buscar_mccs("5411", "Qualquer Nome")
+      {:ok, %Mccs{codigo_mcc: "5411", ...}}
+
+      iex> MccsService.buscar_mccs("9999", "Restaurante A")
+      {:ok, %Mccs{codigo_mcc: "5811", nome_estabelecimento: "Restaurante A", ...}}
+
+      iex> MccsService.buscar_mccs("9999", "Estabelecimento Inexistente")
+      {:error, :mcc_nao_encontrado}
   """
+  @spec buscar_mccs(String.t(), String.t()) ::
+          {:ok, Caju.Mccs.t()} | {:error, :mcc_nao_encontrado}
   def buscar_mccs(mcc, estabelecimento) do
     # Primeiro tenta buscar pelo nome do estabelecimento (precedência mais alta)
     case MccsRepository.pegar_mcc_estabelecimento(estabelecimento) do
@@ -27,8 +65,28 @@ defmodule Caju.Services.MccsService do
 
   @doc """
   Busca MCCs por tipo de benefício.
-  Retorna {:ok, mccs} se encontrar, {:error, :nenhum_mcc_encontrado} caso contrário.
+
+  Retorna todos os MCCs que permitem um determinado tipo de carteira.
+
+  ## Parâmetros
+
+    * `tipo_beneficio` - Tipo de benefício como atom (:food, :meal, :cash)
+
+  ## Retorno
+
+    * `{:ok, mccs}` - Lista de MCCs que permitem o tipo específico
+    * `{:error, :nenhum_mcc_encontrado}` - Quando nenhum MCC é encontrado para o tipo
+
+  ## Exemplos
+
+      iex> MccsService.buscar_mccs_por_tipo(:food)
+      {:ok, [%Mccs{...}, %Mccs{...}]}
+
+      iex> MccsService.buscar_mccs_por_tipo(:invalid)
+      {:error, :nenhum_mcc_encontrado}
   """
+  @spec buscar_mccs_por_tipo(atom()) ::
+          {:ok, list(Caju.Mccs.t())} | {:error, :nenhum_mcc_encontrado}
   def buscar_mccs_por_tipo(tipo_beneficio) do
     mccs = MccsRepository.pegar_mccs_por_tipo(tipo_beneficio)
 
