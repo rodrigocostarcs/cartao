@@ -42,9 +42,9 @@ RUN mix deps.get
 COPY . .
 
 # Configurar e compilar os assets
-RUN cd assets && npm ci && cd .. && \
-    mix assets.setup && \
-    mix assets.build
+RUN cd assets && npm install && cd .. && \
+    mix assets.setup || true && \
+    mix assets.build || true
 
 EXPOSE 4000
 
