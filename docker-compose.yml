@@ -34,7 +34,9 @@ services:
       retries: 10
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - db
       - test_db
@@ -46,7 +48,11 @@ services:
       MIX_ENV: dev
     volumes:
       - .:/app
+      - hex-cache:/app/.hex
+      - mix-cache:/app/.mix
     command: mix phx.server
 
 volumes:
   mysql-data:
+  hex-cache:
+  mix-cache:
