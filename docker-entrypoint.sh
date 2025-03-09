@@ -1,26 +1,35 @@
 #!/bin/bash
 set -e
 
-# Esperar pelo MySQL
-echo "Waiting for MySQL..."
-while ! nc -z $DB_HOST 3306; do
+# Print Elixir and Erlang versions
+echo "Elixir version: $(elixir --version)"
+echo "Erlang version: $(erl -version)"
+
+# Ensure hex and rebar are up to date
+mix local.hex --force
+mix local.rebar --force
+
+# Wait for database
+echo "Waiting for MySQL database..."
+while ! nc -z db 3306; do
   sleep 1
 done
-echo "MySQL started"
+echo "MySQL database is ready"
 
-# Configuração específica para ambiente de teste
-if [ "$MIX_ENV" = "test" ]; then
-  echo "Setting up test environment..."
-  while ! nc -z $TEST_DB_HOST 3306; do
-    sleep 1
-  done
-  echo "Test database started"
-  
-  # Configurar banco de dados de teste
-  mix ecto.drop || true
-  mix ecto.create
-  mix ecto.migrate
-fi
+# Get and compile dependencies
+echo "Fetching dependencies..."
+mix deps.get
+mix deps.compile
 
-# Executar o comando fornecido
-exec "$@"
+# Run database migrations and seeds
+mix ecto.create || true
+mix ecto.migrate
+mix run priv/repo/seeds.exs || true
+
+# Print unchecked dependencies (for debugging)
+echo "Checking dependencies..."
+mix deps.get
+
+# Start the Phoenix server
+echo "Starting Phoenix server..."
+exec mix phx.server
