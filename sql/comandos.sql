@@ -38,7 +38,7 @@ CREATE TABLE contas_carteiras (
 
 CREATE TABLE mccs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo_mcc VARCHAR(255) NOT NULL UNIQUE,
+    codigo_mcc VARCHAR(255) NOT NULL,
     nome_estabelecimento VARCHAR(255) NOT NULL,
     permite_food BOOLEAN NOT NULL DEFAULT FALSE,
     permite_meal BOOLEAN NOT NULL DEFAULT FALSE,

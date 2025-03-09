@@ -4,7 +4,15 @@ defmodule Caju.Repositories.MccsRepository do
   alias Caju.Mccs
 
   def pegar_mcc_por_codigo(codigo) do
-    Repo.get_by(Mccs, codigo_mcc: codigo)
+    # Buscar todos os MCCs com o código fornecido
+    query = from m in Mccs, where: m.codigo_mcc == ^codigo
+
+    # Pegar o primeiro resultado da lista (se houver)
+    case Repo.all(query) do
+      [] -> nil
+      [first | _rest] -> first
+      mccs when is_list(mccs) -> List.first(mccs)
+    end
   end
 
   def pegar_mcc_estabelecimento(estabelecimento) do

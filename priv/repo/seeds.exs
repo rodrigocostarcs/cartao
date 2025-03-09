@@ -92,7 +92,6 @@ defmodule Caju.Seeds.SeedData do
     })
     |> Repo.insert()
 
-    # Resto do código permanece o mesmo
     %Mccs{}
     |> Mccs.changeset(%{
       codigo_mcc: "5411",
@@ -117,6 +116,26 @@ defmodule Caju.Seeds.SeedData do
     |> Mccs.changeset(%{
       codigo_mcc: "5811",
       nome_estabelecimento: "Restaurante A",
+      permite_food: false,
+      permite_meal: true,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "1",
+      nome_estabelecimento: "padaria 1",
+      permite_food: false,
+      permite_meal: true,
+      permite_cash: false
+    })
+    |> Repo.insert()
+
+    %Mccs{}
+    |> Mccs.changeset(%{
+      codigo_mcc: "1",
+      nome_estabelecimento: "padaria 2",
       permite_food: false,
       permite_meal: true,
       permite_cash: false

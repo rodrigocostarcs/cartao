@@ -33,7 +33,7 @@ defmodule Caju.Services.MccsService do
   ## Exemplos
 
       iex> MccsService.buscar_mccs("5411", "Qualquer Nome")
-      {:ok, %Mccs{codigo_mcc: "5411", ...}}
+      {:ok, %Mccs{codigo_mcc: "5411", nome_estabelecimento: "Qualquer Nome", ...}}
 
       iex> MccsService.buscar_mccs("9999", "Restaurante A")
       {:ok, %Mccs{codigo_mcc: "5811", nome_estabelecimento: "Restaurante A", ...}}
@@ -57,8 +57,13 @@ defmodule Caju.Services.MccsService do
       # Se não encontrar pelo nome do estabelecimento, tenta pelo código MCC
       [] ->
         case MccsRepository.pegar_mcc_por_codigo(mcc) do
-          nil -> {:error, :mcc_nao_encontrado}
-          mcc_encontrado -> {:ok, mcc_encontrado}
+          nil ->
+            {:error, :mcc_nao_encontrado}
+
+          mcc_encontrado ->
+            # Substitui o nome do estabelecimento pelo nome enviado na requisição
+            mcc_modificado = %{mcc_encontrado | nome_estabelecimento: estabelecimento}
+            {:ok, mcc_modificado}
         end
     end
   end

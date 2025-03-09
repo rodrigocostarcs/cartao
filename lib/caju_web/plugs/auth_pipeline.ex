@@ -19,13 +19,6 @@ defmodule Caju.Guardian.AuthPipeline do
     module: Caju.Guardian,
     error_handler: CajuWeb.AuthErrorHandler
 
-  @doc """
-  Plugs utilizados no pipeline de autenticação:
-
-  - `Guardian.Plug.VerifyHeader`: Verifica o token JWT no cabeçalho Authorization
-  - `Guardian.Plug.EnsureAuthenticated`: Garante que um token válido foi fornecido
-  - `Guardian.Plug.LoadResource`: Carrega o recurso (estabelecimento) associado ao token
-  """
   plug Guardian.Plug.VerifyHeader, realm: "Bearer"
   plug Guardian.Plug.EnsureAuthenticated
   plug Guardian.Plug.LoadResource

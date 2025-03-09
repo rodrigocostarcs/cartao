@@ -32,16 +32,18 @@ defmodule Caju.Repo.Migrations.CreateCajuTables do
       FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
     )"
 
-    # Tabela mccs
     execute "CREATE TABLE mccs (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      codigo_mcc VARCHAR(255) NOT NULL UNIQUE,
+      codigo_mcc VARCHAR(255) NOT NULL,
       nome_estabelecimento VARCHAR(255) NOT NULL,
       permite_food BOOLEAN NOT NULL DEFAULT FALSE,
       permite_meal BOOLEAN NOT NULL DEFAULT FALSE,
       permite_cash BOOLEAN NOT NULL DEFAULT FALSE,
       criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )"
+
+    # Índice para a coluna codigo_mcc para melhorar performance
+    execute "CREATE INDEX idx_mccs_codigo ON mccs(codigo_mcc)"
 
     # Tabela extratos
     execute "CREATE TABLE extratos (
