@@ -17,7 +17,14 @@ defmodule Caju.MixProject do
         "coveralls.post": :test,
         "coveralls.html": :test
       ],
-      compilers: Mix.compilers() ++ [:phoenix_swagger]
+      compilers: Mix.compilers() ++ [:phoenix_swagger],
+      name: "Caju",
+      source_url: "https://github.com/rodrigocostarcs/caju",
+      homepage_url: "https://github.com/rodrigocostarcs/caju",
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -64,7 +71,8 @@ defmodule Caju.MixProject do
       {:guardian, "~> 2.3"},
       {:excoveralls, "~> 0.15", only: :test},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.7"}
+      {:ex_json_schema, "~> 0.7"},
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false}
     ]
   end
 

@@ -465,6 +465,58 @@ docker-compose logs -f web
 docker-compose restart web
 ```
 
+### Documentação do Código
+
+O projeto Caju possui documentação completa do código usando ExDoc, que pode ser gerada e acessada facilmente.
+
+#### Gerando a Documentação
+
+Para gerar a documentação HTML do projeto:
+
+```bash
+# Certifique-se que a dependência ex_doc está instalada
+docker-compose exec web mix deps.get
+
+# Gere a documentação
+docker-compose exec web mix docs
+```
+
+Este comando criará um diretório `doc/` na raiz do projeto, contendo a documentação HTML completa.
+
+#### Acessando a Documentação
+
+Existem duas formas de acessar a documentação gerada:
+
+1. **Diretamente pelo sistema de arquivos**:
+   - Navegue até o diretório `doc/` no projeto
+   - Abra o arquivo `index.html` em um navegador web
+
+2. **Via servidor web local** (se você estiver usando uma ferramenta como VS Code):
+   - Abra o arquivo `doc/index.html` com sua ferramenta
+   - Use a função "Open with Live Server" ou similar
+
+#### Conteúdo da Documentação
+
+A documentação inclui:
+
+- Visão geral de todos os módulos do sistema
+- Detalhes de cada função pública e seus parâmetros
+- Especificações de tipos (typespecs)
+- Exemplos de uso quando disponíveis
+- Organização hierárquica do código
+
+A documentação é um recurso valioso para novos desenvolvedores entenderem a estrutura e o funcionamento do sistema Caju, apresentando informações detalhadas sobre todos os componentes, desde modelos de dados até serviços e controllers.
+
+#### Atualizando a Documentação
+
+Sempre que fizer alterações significativas no código ou adicionar novos módulos, é recomendável atualizar a documentação:
+
+```bash
+docker-compose exec web mix docs
+```
+
+Isso garantirá que a documentação esteja sempre atualizada com as últimas mudanças no projeto.
+
 ## Tecnologias Utilizadas
 
 - Elixir 1.14
@@ -474,6 +526,7 @@ docker-compose restart web
 - Guardian (Autenticação JWT)
 - Phoenix Swagger
 - ExCoveralls (Cobertura de testes)
+- ExDoc (Documentação de código)
 
 ## Resposta Desafio Técnico
 

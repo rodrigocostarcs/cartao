@@ -1,4 +1,14 @@
 defmodule CajuWeb.SaldoController do
+  @moduledoc """
+  Controller responsável pela consulta de saldos via API.
+
+  Este módulo gerencia as requisições HTTP relacionadas à consulta de saldos
+  de carteiras, fornecendo endpoints para visualização dos saldos e facilitando
+  o processo de testes e desenvolvimento.
+
+  Também inclui a documentação Swagger do endpoint para facilitar o uso da API.
+  """
+
   use CajuWeb, :controller
   use PhoenixSwagger
 
@@ -68,6 +78,36 @@ defmodule CajuWeb.SaldoController do
     }
   end
 
+  @doc """
+  Consulta o saldo de uma carteira específica.
+
+  Endpoint para visualização de saldos de carteiras, útil para testes
+  e monitoramento do sistema.
+
+  ## Parâmetros (via query string)
+
+    * `conta` - Número da conta do usuário
+    * `tipo_carteira` - Tipo da carteira (food, meal, cash)
+
+  ## Retorno
+
+  Em caso de sucesso (status 200):
+  ```json
+  {
+    "conta_numero": "123456",
+    "titular": "João Silva",
+    "tipo_carteira": "food",
+    "saldo": 1000.00,
+    "saldo_reservado": 0.00,
+    "saldo_disponivel": 1000.00
+  }
+  ```
+
+  Em caso de erro:
+  - 404: Conta ou carteira não encontrada
+  - 400: Tipo de carteira inválido
+  - 401: Não autorizado
+  """
   def consultar_saldo(conn, %{"conta" => conta, "tipo_carteira" => tipo_carteira}) do
     case SaldoService.consultar_saldo(conta, tipo_carteira) do
       {:ok, saldo_info} ->
