@@ -11,6 +11,8 @@ FROM contas_carteiras cc
 JOIN contas c ON cc.conta_id = c.id 
 JOIN carteiras ca ON cc.carteira_id = ca.id;
 
+
+
 -- 4. Consultar todos os MCCs:
 SELECT * FROM mccs;
 

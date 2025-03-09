@@ -88,24 +88,6 @@ defmodule Caju.Services.ContasCarteirasService do
     end
   end
 
-  @doc """
-  Verifica saldo suficiente quando o MCC não é encontrado, tentando usar carteira cash.
-
-  ## Parâmetros
-
-    * `carteiras` - Lista de carteiras do usuário
-    * `valor` - Valor da transação
-    * `mcc` - Código MCC do estabelecimento
-    * `mcc_retorno` - Resultado da busca do MCC ({:error, :mcc_nao_encontrado})
-
-  ## Retorno
-
-    * `{:carteira_cash, true}` - Quando há carteira cash com saldo
-    * `{:error, :saldo_insuficiente}` - Quando não há saldo suficiente
-  """
-  @spec saldo_suficiente?(list(), float(), String.t(), {:error, :mcc_nao_encontrado}) ::
-          {:carteira_cash, boolean()}
-          | {:error, :saldo_insuficiente}
   def saldo_suficiente?(carteiras, valor, _mcc, {:error, :mcc_nao_encontrado}) do
     valor_decimal = Decimal.new(to_string(valor))
 
