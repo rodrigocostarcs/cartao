@@ -28,6 +28,7 @@ defmodule CajuWeb.Router do
     pipe_through [:api, :auth]
 
     post "/efetivar/transacao", TransacaoController, :efetivar_transacao
+    get "/consultar/saldo", SaldoController, :consultar_saldo
   end
 
   scope "/auth", CajuWeb do

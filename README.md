@@ -333,6 +333,47 @@ Códigos de retorno:
 - `51`: Saldo insuficiente
 - `07`: Erro geral (conta inexistente, etc.)
 
+#### Consulta de Saldo
+
+```
+GET /api/consultar/saldo?conta=123456&tipo_carteira=food
+```
+
+Cabeçalho:
+```
+Authorization: Bearer {token}
+```
+
+Parâmetros da consulta:
+- `conta`: Número da conta do usuário
+- `tipo_carteira`: Tipo da carteira a consultar (food, meal ou cash)
+
+Resposta de sucesso:
+```json
+{
+  "conta_numero": "123456",
+  "titular": "João Silva",
+  "tipo_carteira": "food", 
+  "saldo": 1000.00,
+  "saldo_reservado": 0.00,
+  "saldo_disponivel": 1000.00
+}
+```
+
+Códigos de retorno HTTP:
+- `200`: Consulta realizada com sucesso
+- `400`: Tipo de carteira inválido
+- `404`: Conta ou carteira não encontrada
+- `401`: Não autorizado
+
+Esta rota foi adicionada para facilitar a visualização dos saldos das carteiras durante o processo de testes e desenvolvimento. Ela permite verificar:
+
+1. O saldo total da carteira
+2. O saldo reservado (valor bloqueado para transações em processamento)
+3. O saldo disponível (saldo total menos o saldo reservado)
+
+A consulta de saldo é útil para confirmar que o mecanismo de reserva de saldo está funcionando corretamente durante as transações e para verificar o estado atual das carteiras do usuário.
+
 ## Testando a API
 
 ### Usando o Swagger
