@@ -73,10 +73,12 @@ defmodule CajuWeb.Router do
           "API para processamento de transações financeiras com diferentes tipos de carteiras.",
         termsOfService: "https://www.escrevendocodigos.com/termos",
         contact: %{
-          name: "xxxx xxx",
-          email: "xxx@xxx.com.br"
+          name: "Equipe",
+          email: "contato@escrevendocodigos.com"
         }
       },
+      host: "api.escrevendocodigos.com",
+      schemes: ["https"],
       securityDefinitions: %{
         Bearer: %{
           type: "apiKey",

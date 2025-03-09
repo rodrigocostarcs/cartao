@@ -13,7 +13,10 @@ config :caju, :phoenix_swagger,
   swagger_files: %{
     "priv/static/swagger.json" => [
       router: CajuWeb.Router,
-      endpoint: CajuWeb.Endpoint
+      endpoint: CajuWeb.Endpoint,
+      host: "api.escrevendocodigos.com",
+      scheme: "https",
+      force: true
     ]
   }
 

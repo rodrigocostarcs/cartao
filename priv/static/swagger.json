@@ -121,11 +121,11 @@
       "type": "object"
     }
   },
-  "host": "localhost:4000",
+  "host": "api.escrevendocodigos.com",
   "info": {
     "contact": {
-      "email": "xxx@xxx.com.br",
-      "name": "xxxx xxx"
+      "email": "contato@escrevendocodigos.com",
+      "name": "Equipe"
     },
     "description": "API para processamento de transações financeiras com diferentes tipos de carteiras.",
     "termsOfService": "https://www.escrevendocodigos.com/termos",
@@ -262,6 +262,9 @@
       }
     }
   },
+  "schemes": [
+    "https"
+  ],
   "securityDefinitions": {
     "Bearer": {
       "description": "Token JWT no formato: Bearer {token}",
