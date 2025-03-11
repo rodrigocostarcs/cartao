@@ -1,9 +1,9 @@
-defmodule Caju.MixProject do
+defmodule Cartao.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :caju,
+      app: :cartao,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,9 +18,9 @@ defmodule Caju.MixProject do
         "coveralls.html": :test
       ],
       compilers: Mix.compilers() ++ [:phoenix_swagger],
-      name: "Caju",
-      source_url: "https://github.com/rodrigocostarcs/caju",
-      homepage_url: "https://github.com/rodrigocostarcs/caju",
+      name: "Cartao",
+      source_url: "https://github.com/rodrigocostarcs/cartao",
+      homepage_url: "https://github.com/rodrigocostarcs/cartao",
       docs: [
         main: "readme",
         extras: ["README.md"]
@@ -33,7 +33,7 @@ defmodule Caju.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Caju.Application, []},
+      mod: {Cartao.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

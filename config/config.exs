@@ -9,29 +9,29 @@ import Config
 
 config :phoenix_swagger, json_library: Jason
 
-config :caju, :phoenix_swagger,
+config :cartao, :phoenix_swagger,
   swagger_files: %{
     "priv/static/swagger.json" => [
-      router: CajuWeb.Router,
-      endpoint: CajuWeb.Endpoint
+      router: CartaoWeb.Router,
+      endpoint: CartaoWeb.Endpoint
     ]
   }
 
-config :caju, Caju.Guardian,
-  issuer: "caju",
+config :cartao, Cartao.Guardian,
+  issuer: "cartao",
   secret_key: "MvbohvG2p82GA29dgXJQG0btDX8ccsHKwy3RZKfd/vvxMdgyK0sVxRvTY2RHLKZV"
 
-config :caju,
-  ecto_repos: [Caju.Repo]
+config :cartao,
+  ecto_repos: [Cartao.Repo]
 
 # Configures the endpoint
-config :caju, CajuWeb.Endpoint,
+config :cartao, CartaoWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: CajuWeb.ErrorHTML, json: CajuWeb.ErrorJSON],
+    formats: [html: CartaoWeb.ErrorHTML, json: CartaoWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Caju.PubSub,
+  pubsub_server: Cartao.PubSub,
   live_view: [signing_salt: "Xq+BC9r9"]
 
 # Configures the mailer
@@ -41,7 +41,7 @@ config :caju, CajuWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :caju, Caju.Mailer, adapter: Swoosh.Adapters.Local
+config :cartao, Cartao.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

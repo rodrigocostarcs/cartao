@@ -1,4 +1,4 @@
-defmodule Caju.Repo.Migrations.CreateCajuTables do
+defmodule Cartao.Repo.Migrations.CreateCartaoTables do
   use Ecto.Migration
 
   def change do

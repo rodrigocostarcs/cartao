@@ -1,4 +1,4 @@
-defmodule CajuWeb.ConnCase do
+defmodule CartaoWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule CajuWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use CajuWeb.ConnCase, async: true`, although
+  by setting `use CartaoWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,19 +20,19 @@ defmodule CajuWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint CajuWeb.Endpoint
+      @endpoint CartaoWeb.Endpoint
 
-      use CajuWeb, :verified_routes
+      use CartaoWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import CajuWeb.ConnCase
+      import CartaoWeb.ConnCase
     end
   end
 
   setup tags do
-    Caju.DataCase.setup_sandbox(tags)
+    Cartao.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

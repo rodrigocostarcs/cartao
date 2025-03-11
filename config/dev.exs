@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
-config :caju, Caju.Repo,
-  username: System.get_env("DB_USER", "caju"),
-  password: System.get_env("DB_PASSWORD", "caju_password"),
+config :cartao, Cartao.Repo,
+  username: System.get_env("DB_USER", "cartao"),
+  password: System.get_env("DB_PASSWORD", "cartao_password"),
   hostname: System.get_env("DB_HOST", "db"),
-  database: System.get_env("DB_NAME", "caju_dev"),
+  database: System.get_env("DB_NAME", "cartao_dev"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -16,7 +16,7 @@ config :caju, Caju.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :caju, CajuWeb.Endpoint,
+config :cartao, CartaoWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {0, 0, 0, 0}, port: 4000],
@@ -30,17 +30,17 @@ config :caju, CajuWeb.Endpoint,
   ]
 
 # Watch static and templates for browser reloading.
-config :caju, CajuWeb.Endpoint,
+config :cartao, CartaoWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/caju_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/cartao_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :caju, dev_routes: true
+config :cartao, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

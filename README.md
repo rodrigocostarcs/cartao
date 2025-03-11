@@ -1,8 +1,8 @@
-# Caju - Sistema de Processamento de Transações
+# Cartao - Sistema de Processamento de Transações
 
 ## Visão Geral
 
-Caju é uma API REST desenvolvida em Elixir com Phoenix Framework para processar transações financeiras em diferentes tipos de carteiras (alimentação, refeição e dinheiro). O sistema implementa um modelo de processamento de transações com validação de MCC (Merchant Category Code) para direcionar pagamentos para os tipos apropriados de carteira.
+Cartao é uma API REST desenvolvida em Elixir com Phoenix Framework para processar transações financeiras em diferentes tipos de carteiras (alimentação, refeição e dinheiro). O sistema implementa um modelo de processamento de transações com validação de MCC (Merchant Category Code) para direcionar pagamentos para os tipos apropriados de carteira.
 
 ## Requisitos
 
@@ -12,7 +12,7 @@ Caju é uma API REST desenvolvida em Elixir com Phoenix Framework para processar
 
 ## Estrutura do Banco de Dados
 
-O sistema Caju utiliza um modelo relacional com as seguintes tabelas e relacionamentos:
+O sistema Cartao utiliza um modelo relacional com as seguintes tabelas e relacionamentos:
 
 ```mermaid
 erDiagram
@@ -126,7 +126,7 @@ Este diagrama foi gerado utilizando [mermaid.live](https://mermaid.live).
 
 ## Fluxo do Sistema
 
-O diagrama abaixo ilustra o fluxo de processamento das transações no sistema Caju:
+O diagrama abaixo ilustra o fluxo de processamento das transações no sistema Cartao:
 
 ```mermaid
 graph TD
@@ -194,8 +194,8 @@ Todas as respostas do sistema são retornadas com status HTTP 200, independentem
 ### Clonando o Repositório
 
 ```bash
-git clone https://github.com/rodrigocostarcs/caju.git
-cd caju
+git clone https://github.com/seu-usuario/cartao.git
+cd cartao
 ```
 
 ### Configuração do Ambiente com Docker
@@ -217,8 +217,8 @@ docker-compose up -d
 3. Aguardar a inicialização completa do sistema. A API estará pronta quando você visualizar no terminal:
 
 ```
-web-1      | [info] Running CajuWeb.Endpoint with cowboy 2.12.0 at 0.0.0.0:4000 (http)
-web-1      | [info] Access CajuWeb.Endpoint at http://localhost:4000
+web-1      | [info] Running CartaoWeb.Endpoint with cowboy 2.12.0 at 0.0.0.0:4000 (http)
+web-1      | [info] Access CartaoWeb.Endpoint at http://localhost:4000
 web-1      | [watch] build finished, watching for changes...
 ```
 
@@ -270,10 +270,10 @@ Para acessar o banco de dados MySQL diretamente:
 
 ```bash
 # Conecte ao container do MySQL
-docker-compose exec db mysql -u caju -pcaju_password caju_dev
+docker-compose exec db mysql -u cartao -pcartao_password cartao_dev
 
 # Ou se preferir conectar via host
-mysql -h 127.0.0.1 -P 3306 -u caju -pcaju_password caju_dev
+mysql -h 127.0.0.1 -P 3306 -u cartao -pcartao_password cartao_dev
 ```
 
 ## Documentação da API
@@ -386,7 +386,7 @@ A consulta de saldo é útil para confirmar que o mecanismo de reserva de saldo 
 
 ### Usando o Postman
 
-Um arquivo Postman Collection está disponível na raiz do projeto (`caju.postman_collection.json`), contendo exemplos de todas as requisições.
+Um arquivo Postman Collection está disponível na raiz do projeto (`cartao.postman_collection.json`), contendo exemplos de todas as requisições.
 
 1. Importe a coleção no Postman
 2. Execute a requisição "Login" para obter o token
@@ -416,7 +416,7 @@ Para executar a suíte de testes do projeto, você precisa usar o ambiente de te
 docker-compose exec -e MIX_ENV=test web mix test
 
 # Executar um arquivo de teste específico
-docker-compose exec -e MIX_ENV=test web mix test test/caju/services/contas_carteiras_service_test.exs
+docker-compose exec -e MIX_ENV=test web mix test test/cartao/services/contas_carteiras_service_test.exs
 ```
 
 > **Observação**: É importante usar a flag `-e MIX_ENV=test` para garantir que os testes usem o ambiente correto com a configuração do Ecto.Adapters.SQL.Sandbox.
@@ -443,10 +443,10 @@ Isso gerará um relatório HTML na pasta `cover/` que pode ser aberto em um nave
 
 ### Estrutura do Projeto
 
-- `lib/caju/models`: Esquemas Ecto para as tabelas
-- `lib/caju/repositories`: Acesso ao banco de dados
-- `lib/caju/services`: Regras de negócio
-- `lib/caju_web/controllers`: Controladores da API
+- `lib/cartao/models`: Esquemas Ecto para as tabelas
+- `lib/cartao/repositories`: Acesso ao banco de dados
+- `lib/cartao/services`: Regras de negócio
+- `lib/cartao_web/controllers`: Controladores da API
 - `test/`: Testes unitários e de integração
 
 ### Comandos Úteis
@@ -467,7 +467,7 @@ docker-compose restart web
 
 ### Documentação do Código
 
-O projeto Caju possui documentação completa do código usando ExDoc, que pode ser gerada e acessada facilmente.
+O projeto Cartao possui documentação completa do código usando ExDoc, que pode ser gerada e acessada facilmente.
 
 #### Gerando a Documentação
 
@@ -505,7 +505,7 @@ A documentação inclui:
 - Exemplos de uso quando disponíveis
 - Organização hierárquica do código
 
-A documentação é um recurso valioso para novos desenvolvedores entenderem a estrutura e o funcionamento do sistema Caju, apresentando informações detalhadas sobre todos os componentes, desde modelos de dados até serviços e controllers.
+A documentação é um recurso valioso para novos desenvolvedores entenderem a estrutura e o funcionamento do sistema Cartao, apresentando informações detalhadas sobre todos os componentes, desde modelos de dados até serviços e controllers.
 
 #### Atualizando a Documentação
 
@@ -528,8 +528,6 @@ Isso garantirá que a documentação esteja sempre atualizada com as últimas mu
 - ExCoveralls (Cobertura de testes)
 - ExDoc (Documentação de código)
 
-## Resposta Desafio Técnico
+## Desafio Técnico no Projeto
 
-### L4. Questão aberta
-
-Para garantir que apenas uma transação por conta fosse processada em um determinado momento, em uma transação síncrona, poderia ser utilizado um sistema de reserva de saldo, no qual a transação chegaria e, no primeiro passo, faria a reserva do saldo com base no valor da transação. Em seguida, seriam realizadas todas as validações necessárias e, no momento do lançamento, o saldo reservado seria descontado do saldo real e retirado do saldo reservado, sempre validando se o saldo reservado é maior ou igual ao valor da transação no momento do lançamento. No desafio proposto, implementei essa estrutura e também adicionei as operações dentro de uma transaction do Ecto, para garantir que, caso ocorra algum erro, seja dado rollback em todas as operações, incluindo na reserva do saldo, no lançamento na tabela de transações e no extrato.
+Para garantir que apenas uma transação por conta fosse processada em um determinado momento, em uma transação síncrona, poderia ser utilizado um sistema de reserva de saldo, no qual a transação chegaria e, no primeiro passo, faria a reserva do saldo com base no valor da transação. Em seguida, seriam realizadas todas as validações necessárias e, no momento do lançamento, o saldo reservado seria descontado do saldo real e retirado do saldo reservado, sempre validando se o saldo reservado é maior ou igual ao valor da transação no momento do lançamento. 

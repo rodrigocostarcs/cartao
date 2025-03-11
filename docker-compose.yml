@@ -3,17 +3,17 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Caju@1234
-      MYSQL_DATABASE: caju_dev
-      MYSQL_USER: caju
-      MYSQL_PASSWORD: caju_password
+      MYSQL_ROOT_PASSWORD: Cartao@1234
+      MYSQL_DATABASE: cartao_dev
+      MYSQL_USER: cartao
+      MYSQL_PASSWORD: cartao_password
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pCaju@1234"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pCartao@1234"]
       timeout: 5s
       retries: 10
 
@@ -21,15 +21,15 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Caju@1234
-      MYSQL_DATABASE: caju_test
-      MYSQL_USER: caju
-      MYSQL_PASSWORD: caju_password
+      MYSQL_ROOT_PASSWORD: Cartao@1234
+      MYSQL_DATABASE: cartao_test
+      MYSQL_USER: cartao
+      MYSQL_PASSWORD: cartao_password
     ports:
       - "3307:3306"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pCaju@1234"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pCartao@1234"]
       timeout: 5s
       retries: 10
 

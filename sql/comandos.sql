@@ -1,5 +1,5 @@
-CREATE DATABASE caju_dev;
-use caju_dev;
+CREATE DATABASE cartao_dev;
+use cartao_dev;
 DROP TABLE IF EXISTS extratos;
 DROP TABLE IF EXISTS mccs;
 DROP TABLE IF EXISTS transacoes;

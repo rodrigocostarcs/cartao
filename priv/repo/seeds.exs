@@ -1,10 +1,10 @@
-defmodule Caju.Seeds.SeedData do
-  alias Caju.Repo
-  alias Caju.Contas
-  alias Caju.Carteiras
-  alias Caju.ContasCarteiras
-  alias Caju.Mccs
-  alias Caju.Estabelecimentos
+defmodule Cartao.Seeds.SeedData do
+  alias Cartao.Repo
+  alias Cartao.Contas
+  alias Cartao.Carteiras
+  alias Cartao.ContasCarteiras
+  alias Cartao.Mccs
+  alias Cartao.Estabelecimentos
 
   def insert_seed_data do
     # Limpar todas as tabelas antes de inserir
@@ -179,7 +179,7 @@ case Mix.env() do
     IO.puts("Seeds de teste podem ser carregados no setup do teste")
 
   :dev ->
-    Caju.Seeds.SeedData.insert_seed_data()
+    Cartao.Seeds.SeedData.insert_seed_data()
     IO.puts("Seeds de desenvolvimento inseridos com sucesso!")
 
   _ ->

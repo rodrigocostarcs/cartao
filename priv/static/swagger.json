@@ -129,14 +129,14 @@
     },
     "description": "API para processamento de transações financeiras com diferentes tipos de carteiras.",
     "termsOfService": "https://www.escrevendocodigos.com/termos",
-    "title": "API Caju",
+    "title": "API Cartao",
     "version": "1.0"
   },
   "paths": {
     "/api/consultar/saldo": {
       "get": {
         "description": "Retorna o saldo atual da carteira especificada para a conta informada.\n\nExemplos de requisições:\n\n1. Consulta de saldo de carteira food:\n   GET /api/consultar/saldo?conta=123456&tipo_carteira=food\n\n2. Consulta de saldo de carteira meal:\n   GET /api/consultar/saldo?conta=789012&tipo_carteira=meal\n\n3. Consulta de saldo de carteira cash:\n   GET /api/consultar/saldo?conta=789012&tipo_carteira=cash\n",
-        "operationId": "CajuWeb.SaldoController.consultar_saldo",
+        "operationId": "CartaoWeb.SaldoController.consultar_saldo",
         "parameters": [
           {
             "description": "Número da conta",
@@ -187,7 +187,7 @@
           "application/json"
         ],
         "description": "Processa uma transação financeira usando o número da conta, valor, código MCC e nome do estabelecimento.\n\nExemplos de requisições:\n\n1. Aprovação com carteira de alimentação:\n   { \"conta\": \"123456\", \"valor\": 100.00, \"mcc\": \"5411\", \"estabelecimento\": \"Supermercado A\" }\n\n2. Aprovação com carteira de refeição:\n   { \"conta\": \"789012\", \"valor\": 100.00, \"mcc\": \"5811\", \"estabelecimento\": \"Restaurante A\" }\n\n3. Aprovação com carteira cash (MCC não mapeado):\n   { \"conta\": \"789012\", \"valor\": 100.00, \"mcc\": \"58191\", \"estabelecimento\": \"Loja jp\" }\n\n4. Rejeição por saldo insuficiente:\n   { \"conta\": \"789012\", \"valor\": 2900.00, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n\n5. Sem saldo na carteira Meal, usando Cash:\n   { \"conta\": \"789012\", \"valor\": 2800.01, \"mcc\": \"5811\", \"estabelecimento\": \"Supermercado B\" }\n\n6. Mapear por estabelecimento:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n\n7. Erro quando conta inexistente:\n   { \"conta\": \"78901200\", \"valor\": 2900, \"mcc\": \"581911\", \"estabelecimento\": \"Restaurante A\" }\n\n8. Efetivar Transação - MCC iguais:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"1\", \"estabelecimento\": \"padaria 1\" }\n\n9. Efetivar Transação - MCC iguais:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"1\", \"estabelecimento\": \"padaria 1\" }\n\n10. Efetivar Transação - MCC iguais:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"1\", \"estabelecimento\": \"padaria 2\" }\n\n11. Efetivar Transação - MCC iguais:\n   { \"conta\": \"789012\", \"valor\": 0.55, \"mcc\": \"1\", \"estabelecimento\": \"padaria 3\" }\n",
-        "operationId": "CajuWeb.TransacaoController.efetivar_transacao",
+        "operationId": "CartaoWeb.TransacaoController.efetivar_transacao",
         "parameters": [
           {
             "description": "Parâmetros da transação",
@@ -227,7 +227,7 @@
     "/auth/login": {
       "post": {
         "description": "Autentica um estabelecimento usando UUID e senha. Retorna um token JWT com tempo de expiração de 1 minuto.\n\nExemplo de requisição:\nGET /auth/login?uuid=fa1b48ca-4eee-44db-9e6a-37cf4d58f1ea&senha=senha_secreta\n",
-        "operationId": "CajuWeb.AuthController.login",
+        "operationId": "CartaoWeb.AuthController.login",
         "parameters": [
           {
             "description": "UUID do estabelecimento",
