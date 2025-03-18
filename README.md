@@ -194,7 +194,7 @@ Todas as respostas do sistema são retornadas com status HTTP 200, independentem
 ### Clonando o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/cartao.git
+git clone https://github.com/rodrigocostarcs/cartao.git
 cd cartao
 ```
 
